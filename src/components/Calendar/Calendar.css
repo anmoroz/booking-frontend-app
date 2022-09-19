@@ -1,0 +1,13 @@
+.fc-day-sat, .fc-day-sun {
+    color: #C70039;
+}
+.fc-event{
+    cursor: pointer;
+}
+.fc-daygrid-event {
+    border-radius: 10px !important;
+    height: 30px;
+}
+.fc-button {
+    background-color: #008696 !important;
+}

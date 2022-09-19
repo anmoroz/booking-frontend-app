@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "startDate": "2022-09-30",
+    "days": 3,
+    "note": "Примечание по брони",
+    "numberOfGuests": 1,
+    "user": {
+      "id": 1,
+      "name": "Andrey",
+      "phone": "+79204040255",
+      "note": "Примечание для юзера"
+    }
+  },
+  {
+    "id": 2,
+    "startDate": "2022-09-08",
+    "days": 1,
+    "note": "",
+    "numberOfGuests": 2,
+    "user": {
+      "id": 2,
+      "name": "Антон",
+      "phone": "+79205487542",
+      "note": ""
+    }
+  },
+  {
+    "id": 3,
+    "startDate": "2022-09-10",
+    "days": 2,
+    "note": "Бронирование закрыто на 2 дня",
+    "numberOfGuests": 0,
+    "user": null
+  }
+]
