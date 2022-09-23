@@ -3,26 +3,25 @@ import React, {useEffect, useState} from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction"
-import BookingService from "../../API/BookingService";
+import ReservationService from "../../API/ReservationService";
 import {buildEvent} from "../../utils/EventBuilder";
 
 import './Calendar.css'
-import BookingForm from "../Booking/BookingForm";
+import ReservationForm from "../Reservation/ReservationForm";
 import ModalWindow from "../UI/Modal/ModalWindow";
 
 const Calendar = () => {
     const [calendarEvents, setCalendarEvents] = useState([]);
-    const [bookingList, setBookingList] = useState([]);
+    const [reservations, setReservations] = useState([]);
     const [showForm, setShowForm] = useState(false);
+    const [selectedReservation, setSelectedReservation] = useState();
 
-    const [selectedBooking, setSelectedBooking] = useState();
-
-    const openBookingForm = (selectedBooking) => {
-        setSelectedBooking(selectedBooking);
+    const openReservationForm = (selectedReservation) => {
+        setSelectedReservation(selectedReservation);
         setShowForm(true);
     }
-    const closeBookingForm = () => {
-        setSelectedBooking(undefined);
+    const closeReservationForm = () => {
+        setSelectedReservation(undefined);
         setShowForm(false);
     }
 
@@ -40,46 +39,51 @@ const Calendar = () => {
         })
 
         if (selectedEvent) {
-            openBookingForm(bookingList.find((element) => element.id === selectedEvent.id))
+            openReservationForm(reservations.find((element) => element.id === selectedEvent.id))
         } else {
             // Пустая форма для создания или закрытия бронирование
-            openBookingForm()
+            openReservationForm()
         }
     }
 
     const handleEventClick = (e) => {
-        const selectedBooking = bookingList.find((element) => element.id === Number(e.event.id));
-        openBookingForm(selectedBooking);
+        const selectedReservation = reservations.find((element) => element.id === Number(e.event.id));
+        openReservationForm(selectedReservation);
     }
 
-    const deleteBookingHandler = (b) => {
+    const deleteReservationHandler = (b) => {
         setCalendarEvents(calendarEvents.filter(e => e.id !== b.id))
     }
 
-    const updateBookingHandler = (bookingFormData) => {
+    const updateReservationHandler = (reservationFormData) => {
 
-        const indexBooking = bookingList.findIndex(b => b.id === bookingFormData.id)
-        let updatedBookingItem = bookingList[indexBooking];
+        const indexReservation = reservations.findIndex(b => b.id === reservationFormData.id)
+        let updatedReservationItem = reservations[indexReservation];
 
-        if (bookingFormData.name) {
-            updatedBookingItem.user.name = bookingFormData.name
-            updatedBookingItem.user.phone = bookingFormData.phone
+        //console.log(reservationFormData);
+
+        if (reservationFormData.name) {
+            updatedReservationItem.contact.name = reservationFormData.name
+            updatedReservationItem.contact.phone = reservationFormData.phone
         }
-        updatedBookingItem.numberOfGuests = bookingFormData.numberOfGuests
-        updatedBookingItem.startDate = bookingFormData.startDate.toISOString().split('T')[0]
-        updatedBookingItem.days = bookingFormData.days
-        updatedBookingItem.note = bookingFormData.note
+        updatedReservationItem.adults = reservationFormData.adults
+        updatedReservationItem.children = reservationFormData.children
+        updatedReservationItem.checkin = reservationFormData.checkin.toISOString().split('T')[0]
+        updatedReservationItem.checkout = reservationFormData.checkout.toISOString().split('T')[0]
+        updatedReservationItem.note = reservationFormData.note
 
-        setBookingList(
-            bookingList.map(function (bookingFormData) {
-                if (bookingFormData.id === updatedBookingItem.id) {
-                    return updatedBookingItem;
+        setReservations(
+            reservations.map(function (reservationFormData) {
+                if (reservationFormData.id === updatedReservationItem.id) {
+                    return updatedReservationItem;
                 }
-                return bookingFormData;
+                return reservationFormData;
             })
         )
 
-        let updatedCalendarEvent = buildEvent(updatedBookingItem)
+        //console.log(updatedReservationItem);
+
+        let updatedCalendarEvent = buildEvent(updatedReservationItem)
 
         setCalendarEvents(
             calendarEvents.map(function (event) {
@@ -92,18 +96,18 @@ const Calendar = () => {
     }
 
     useEffect(() => {
-        fetchBookingList()
+        fetchReservations()
     }, [])
 
-    async function fetchBookingList() {
-        const bookingList = await BookingService.getAll();
+    async function fetchReservations() {
+        const reservations = await ReservationService.getAll();
         let events = [];
-        bookingList.forEach((bookingItem) => {
-            let event = buildEvent(bookingItem)
+        reservations.forEach((reservation) => {
+            let event = buildEvent(reservation)
             events.push(event);
         })
 
-        setBookingList(bookingList);
+        setReservations(reservations);
         setCalendarEvents(events);
     }
 
@@ -129,12 +133,12 @@ const Calendar = () => {
             />
             <ModalWindow
                 open={showForm}
-                handleClose={closeBookingForm}
-                content={<BookingForm
-                    selectedBooking={selectedBooking}
-                    closeBookingForm={closeBookingForm}
-                    updateBookingHandler={updateBookingHandler}
-                    deleteBookingHandler={deleteBookingHandler}
+                handleClose={closeReservationForm}
+                content={<ReservationForm
+                    selectedReservation={selectedReservation}
+                    closeReservationForm={closeReservationForm}
+                    updateReservationHandler={updateReservationHandler}
+                    deleteReservationHandler={deleteReservationHandler}
                 />}
             />
         </div>

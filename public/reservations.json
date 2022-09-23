@@ -1,11 +1,12 @@
 [
   {
     "id": 1,
-    "startDate": "2022-09-30",
-    "days": 3,
+    "checkin": "2022-09-30",
+    "checkout": "2022-10-02",
     "note": "Примечание по брони",
-    "numberOfGuests": 1,
-    "user": {
+    "adults": 2,
+    "children": 0,
+    "contact": {
       "id": 1,
       "name": "Andrey",
       "phone": "+79204040255",
@@ -14,11 +15,12 @@
   },
   {
     "id": 2,
-    "startDate": "2022-09-08",
-    "days": 1,
+    "checkin": "2022-09-08",
+    "checkout": "2022-09-09",
     "note": "",
-    "numberOfGuests": 2,
-    "user": {
+    "adults": 2,
+    "children": 0,
+    "contact": {
       "id": 2,
       "name": "Антон",
       "phone": "+79205487542",
@@ -27,10 +29,12 @@
   },
   {
     "id": 3,
-    "startDate": "2022-09-10",
+    "checkin": "2022-09-10",
+    "checkout": "2022-09-12",
     "days": 2,
     "note": "Бронирование закрыто на 2 дня",
-    "numberOfGuests": 0,
-    "user": null
+    "adults": 2,
+    "children": 0,
+    "contact": null
   }
 ]

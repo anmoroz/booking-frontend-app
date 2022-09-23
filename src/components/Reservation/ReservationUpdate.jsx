@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BookingUpdate = () => {
+const ReservationUpdate = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const BookingUpdate = () => {
     );
 };
 
-export default BookingUpdate;
+export default ReservationUpdate;
