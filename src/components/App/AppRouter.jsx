@@ -1,30 +1,23 @@
 import React, {useContext} from 'react';
-import {AuthContext} from "../../context";
+import {AuthContext} from "../../context/AuthProvider";
+
 import {Navigate, Route, Routes} from "react-router-dom";
-import LoginPage from "../../pages/LoginPage";
+import Login from "../Login/Login";
 import CalendarPage from "../../pages/CalendarPage";
 
 const AppRouter = () => {
-    const {isAuth} = useContext(AuthContext);
+    const { authState } = useContext(AuthContext);
 
     return (
-        isAuth
-            ?
-            <Routes>
-                <Route path="/calendar" element={ <CalendarPage/> } />
-                <Route
-                    path="*"
-                    element={<Navigate to="/calendar" replace />}
-                />
-            </Routes>
-            :
-            <Routes>
-                <Route path="/login" element={ <LoginPage/> } />
-                <Route
-                    path="*"
-                    element={<Navigate to="/login" replace />}
-                />
-            </Routes>
+        authState.authenticated
+            ? <Routes>
+                    <Route path="/calendar" element={ <CalendarPage/> } />
+                    <Route
+                        path="*"
+                        element={<Navigate to="/calendar" replace />}
+                    />
+                </Routes>
+            : <Login/>
     );
 };
 

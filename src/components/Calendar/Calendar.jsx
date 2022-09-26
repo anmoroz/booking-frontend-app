@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction"
-import ReservationService from "../../API/ReservationService";
+import ReservationService from "../../api/ReservationService";
 import {buildEvent} from "../../utils/EventBuilder";
 
 import './Calendar.css'

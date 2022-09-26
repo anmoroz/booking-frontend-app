@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-
-import './App.css';
+import React, {useContext} from 'react';
 import {BrowserRouter} from "react-router-dom";
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {AuthContext} from '../../context';
 import AppRouter from "./AppRouter";
 import Navbar from "../UI/Navbar/Navbar";
+import {AuthContext} from "../../context/AuthProvider";
+
+import './App.css';
 
 const theme = createTheme({
     palette: {
@@ -20,21 +20,16 @@ const theme = createTheme({
 });
 
 function App() {
-    const [isAuth, setIsAuth] = useState(false);
+    const { authState, logout } = useContext(AuthContext);
 
     return (
         <ThemeProvider theme={theme}>
-            <AuthContext.Provider value={{
-                isAuth,
-                setIsAuth
-            }}>
-                <BrowserRouter>
-                    <Navbar/>
-                    <Container fixed className="Container_main">
-                        <AppRouter/>
-                    </Container>
-                </BrowserRouter>
-            </AuthContext.Provider>
+            <BrowserRouter>
+                {authState.authenticated && <Navbar logout={logout}/>}
+                <Container fixed className="Container_main">
+                    <AppRouter/>
+                </Container>
+            </BrowserRouter>
         </ThemeProvider>
     );
 }

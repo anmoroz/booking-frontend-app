@@ -1,0 +1,12 @@
+.LoginPage-form {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    max-width: 90%;
+    min-width: 600px;
+    border: 1px solid #009aaf;
+    padding: 8px;
+    border-radius: 8px;
+}
