@@ -2,6 +2,11 @@
 export const buildEvent = (reservationItem) => {
     let contact = reservationItem.contact;
     let title = "";
+
+    if (reservationItem.id > 7) {
+        console.log('reservationItem', reservationItem)
+    }
+
     if (contact !== null) {
         title = `${contact.name} (взр. ${reservationItem.adults}, д. ${reservationItem.children})`
     }

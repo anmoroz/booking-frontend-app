@@ -7,12 +7,13 @@ import ReservationService from "../../api/ReservationService";
 import {buildEvent} from "../../utils/EventBuilder";
 import ReservationForm from "../Reservation/ReservationForm";
 import ModalWindow from "../UI/Modal/ModalWindow";
+import dayjs from "dayjs";
 
 import './Calendar.css'
 
 const Calendar = ({setShowProgress}) => {
     let reservationService = ReservationService;
-    const [calendarEvents, setCalendarEvents] = React.useState([]);
+    const [events, setEvents] = React.useState([]);
     const [reservations, setReservations] = React.useState([]);
     const [showForm, setShowForm] = React.useState(false);
     const [selectedReservation, setSelectedReservation] = React.useState();
@@ -28,7 +29,7 @@ const Calendar = ({setShowProgress}) => {
 
     const handleDateClick = (arg) => {
         let clickedDate = new Date(arg.date);
-        let selectedEvent = calendarEvents.find((event) => {
+        let selectedEvent = events.find((event) => {
             let eventStartDate = new Date(event.start),
                 eventEndDate = new Date(event.end);
 
@@ -42,8 +43,12 @@ const Calendar = ({setShowProgress}) => {
         if (selectedEvent) {
             openReservationForm(reservations.find((element) => element.id === selectedEvent.id))
         } else {
-            // Пустая форма для создания или закрытия бронирование
-            openReservationForm()
+            // Пустая форма для создания/закрытия бронирования
+            openReservationForm({
+                checkin: dayjs(clickedDate).format("YYYY-MM-DD"),
+                checkout: dayjs(clickedDate).add(1, 'day').format("YYYY-MM-DD") ,
+                isNewReservation: true
+            })
         }
     }
 
@@ -53,64 +58,96 @@ const Calendar = ({setShowProgress}) => {
     }
 
     const deleteReservationHandler = (b) => {
-        setCalendarEvents(calendarEvents.filter(e => e.id !== b.id))
+        setEvents(events.filter(e => e.id !== b.id))
     }
 
-    const updateReservationHandler = (reservationFormData) => {
+    const updateReservationHandler = (reservationFormData, successCallback, errorCallback) => {
+        setShowProgress(true);
 
-        const indexReservation = reservations.findIndex(b => b.id === reservationFormData.id)
-        let updatedReservationItem = reservations[indexReservation];
-
-        //console.log(reservationFormData);
-
-        if (reservationFormData.name) {
-            updatedReservationItem.contact.name = reservationFormData.name
-            updatedReservationItem.contact.phone = reservationFormData.phone
+        let reservation = {
+            id: undefined,
+            adults: 0,
+            children: 0,
+            note: "",
+            checkin: undefined,
+            checkout: undefined,
+            contact: null,
         }
-        updatedReservationItem.adults = reservationFormData.adults
-        updatedReservationItem.children = reservationFormData.children
-        updatedReservationItem.checkin = reservationFormData.checkin.toISOString().split('T')[0]
-        updatedReservationItem.checkout = reservationFormData.checkout.toISOString().split('T')[0]
-        updatedReservationItem.note = reservationFormData.note
+        if (!reservationFormData.isNewReservation) {
+            const indexReservation = reservations.findIndex(b => b.id === reservationFormData.id)
+            reservation = reservations[indexReservation];
+        }
+
+        if (!reservationFormData.isClose) {
+            if (reservationFormData.name) {
+                reservation.contact.name = reservationFormData.name
+                reservation.contact.phone = reservationFormData.phone
+            }
+            reservation.adults = reservationFormData.adults
+            reservation.children = reservationFormData.children
+        }
+
+        reservation.checkin = reservationFormData.checkin.toISOString().split('T')[0]
+        reservation.checkout = reservationFormData.checkout.toISOString().split('T')[0]
+        reservation.note = reservationFormData.note
 
         setReservations(
-            reservations.map(function (reservationFormData) {
-                if (reservationFormData.id === updatedReservationItem.id) {
-                    return updatedReservationItem;
+            reservations.map(function (reservationItem) {
+                if (reservationItem.id === reservation.id) {
+                    return reservation;
                 }
-                return reservationFormData;
+                return reservationItem;
             })
         )
 
-        //console.log(updatedReservationItem);
-
-        let updatedCalendarEvent = buildEvent(updatedReservationItem)
-
-        setCalendarEvents(
-            calendarEvents.map(function (event) {
-                if (event.id === updatedCalendarEvent.id) {
-                    return updatedCalendarEvent;
-                }
-                return event;
-            })
-        )
+        if (reservationFormData.isNewReservation) {
+            createReservation(reservation)
+                .then((createdReservation) => {
+                    addReservation(createdReservation);
+                    addEvent(buildEvent(createdReservation));
+                    successCallback();
+                })
+                .catch((error) => {
+                    errorCallback(error.response.data.message);
+                });
+        } else {
+            let calendarEvent = buildEvent(reservation);
+            setEvents(
+                events.map(function (event) {
+                    if (event.id === calendarEvent.id) {
+                        return calendarEvent;
+                    }
+                    return event;
+                })
+            )
+            successCallback();
+        }
+        setShowProgress(false);
     }
+
+    const addReservation = React.useCallback((newReservation) => {
+        setReservations(reservations => ([ ...reservations, newReservation ]))
+    }, [])
+
+    const addEvent = React.useCallback((newEvent) => {
+        setEvents(events => ([ ...events, newEvent ]))
+    }, [])
 
     React.useEffect(() => {
         fetchReservations()
     }, [])
 
+    async function createReservation(newReservation) {
+        return await reservationService.create(newReservation);
+    }
+
     async function fetchReservations() {
         setShowProgress(true);
         const reservations = await reservationService.list();
-        let events = [];
         reservations.forEach((reservation) => {
-            let event = buildEvent(reservation)
-            events.push(event);
+            addReservation(reservation);
+            addEvent(buildEvent(reservation));
         })
-
-        setReservations(reservations);
-        setCalendarEvents(events);
         setShowProgress(false);
     }
 
@@ -132,7 +169,7 @@ const Calendar = ({setShowProgress}) => {
                 eventColor="#66CC00"
                 eventBackgroundColor="#66CC00"
                 nextDayThreshold='12:00:00'
-                events={calendarEvents}
+                events={events}
             />
             <ModalWindow
                 open={showForm}

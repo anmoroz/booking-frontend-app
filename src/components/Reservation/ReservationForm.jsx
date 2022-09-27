@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import 'dayjs/locale/ru';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,33 +9,50 @@ import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DesktopDatePicker} from "@mui/x-date-pickers";
 import Grid from '@mui/material/Grid';
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ConfirmDialog from "../UI/Dialog/ConfirmDialog";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 import './ReservationForm.css';
-import ConfirmDialog from "../UI/Dialog/ConfirmDialog";
 
-const ReservationForm = ({selectedReservation, closeReservationForm, updateReservationHandler, deleteReservationHandler}) => {
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+const ReservationForm = ({
+     selectedReservation,
+     closeReservationForm,
+     updateReservationHandler,
+     deleteReservationHandler
+}) => {
+    const [showConfirmDialog, setShowConfirmDialog] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(false)
 
-    const [reservation, setReservation] = useState({
-        id: (selectedReservation !== undefined) ? selectedReservation.id : undefined,
-        name: (selectedReservation !== undefined && selectedReservation.contact) ? selectedReservation.contact.name : '',
-        phone: (selectedReservation !== undefined && selectedReservation.contact) ? selectedReservation.contact.phone : '',
-        adults: (selectedReservation !== undefined) ? selectedReservation.adults : 0,
-        children: (selectedReservation !== undefined) ? selectedReservation.children : 0,
-        note: (selectedReservation !== undefined) ? selectedReservation.note : "",
-        checkin: (selectedReservation !== undefined) ? new Date(selectedReservation.checkin) : new Date(),
-        checkout: (selectedReservation !== undefined) ? new Date(selectedReservation.checkout) : new Date(),
-        isClose: selectedReservation === undefined || selectedReservation.contact === null
+    const [reservation, setReservation] = React.useState({
+        id: (selectedReservation.hasOwnProperty('id')) ? selectedReservation.id : undefined,
+        name: (selectedReservation.hasOwnProperty('contact') && selectedReservation.contact) ? selectedReservation.contact.name : '',
+        phone: (selectedReservation.hasOwnProperty('contact') && selectedReservation.contact) ? selectedReservation.contact.phone : '',
+        adults: (selectedReservation.hasOwnProperty('adults')) ? selectedReservation.adults : 1,
+        children: (selectedReservation.hasOwnProperty('children')) ? selectedReservation.children : 0,
+        note: (selectedReservation.hasOwnProperty('note')) ? selectedReservation.note : "",
+        checkin: new Date(selectedReservation.checkin),
+        checkout: new Date(selectedReservation.checkout),
+        isClose: !selectedReservation.hasOwnProperty('contact') || selectedReservation.contact === null,
+        isNewReservation: selectedReservation.hasOwnProperty('isNewReservation')
     });
 
     const saveReservationFormHandler = (event) => {
         event.preventDefault();
+        updateReservationHandler(
+            reservation,
+            () => {
+                closeReservationForm();
+                setErrorMessage(false);
+            },
+            (message) => {
+                setErrorMessage(message)
+            }
+        )
 
-        console.log(JSON.stringify(reservation))
-
-
-        updateReservationHandler(reservation)
-        closeReservationForm()
     }
 
     const deleteReservation = () => {
@@ -45,13 +62,39 @@ const ReservationForm = ({selectedReservation, closeReservationForm, updateReser
 
     return (
         <div>
-            <Typography id="modal-modal-title" variant="h5" component="h3" m={1} p={1}>
-                {reservation.isClose ? <span>Бронирование закрыто</span> : <span>Бронирование</span>}
-            </Typography>
 
-
+            {
+                errorMessage &&
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                    <Alert variant="filled" severity="error">
+                        {errorMessage}
+                    </Alert>
+                </Stack>
+            }
+            {
+                !reservation.isNewReservation &&
+                <Typography id="modal-modal-title" variant="h5" component="h3" m={1} p={1}>
+                    {reservation.isClose ? <span>Бронирование закрыто</span> : <span>Бронирование</span>}
+                </Typography>
+            }
             <Box sx={{ flexGrow: 1 }} m={1} p={1}>
                 <Grid container spacing={2}>
+                    {
+                        reservation.isNewReservation &&
+                        <Grid item xs={12}>
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            defaultChecked
+                                            onChange={e => setReservation({...reservation, isClose: e.target.checked})}
+                                        />
+                                    }
+                                    label="Закрыть бронь"
+                                />
+                            </FormGroup>
+                        </Grid>
+                    }
                     <Grid item xs={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru" >
                             <DesktopDatePicker
@@ -85,7 +128,7 @@ const ReservationForm = ({selectedReservation, closeReservationForm, updateReser
                         </LocalizationProvider>
                     </Grid>
                     {
-                        !reservation.isClose &&
+                        (!reservation.isClose) &&
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
@@ -184,16 +227,19 @@ const ReservationForm = ({selectedReservation, closeReservationForm, updateReser
                     Сохранить
                 </Button>
                 <div>
-                    <Button
-                        color="secondary"
-                        type="button"
-                        variant="contained"
-                        size="small"
-                        style={{marginRight: "5px"}}
-                        onClick={() => setShowConfirmDialog(true)}
-                    >
-                        {reservation.isClose ? "Открыть бронирование" : "Отменить бронирование"}
-                    </Button>
+                    {
+                        !reservation.isNewReservation &&
+                        <Button
+                            color="secondary"
+                            type="button"
+                            variant="contained"
+                            size="small"
+                            style={{marginRight: "5px"}}
+                            onClick={() => setShowConfirmDialog(true)}
+                        >
+                            {reservation.isClose ? "Открыть бронирование" : "Отменить бронирование"}
+                        </Button>
+                    }
                     <Button variant="outlined" size="small" onClick={closeReservationForm}>Отмена</Button>
                 </div>
             </Box>
