@@ -1,4 +1,3 @@
-import React from 'react';
 import useAxios from "./useAxios";
 
 const ReservationService = (function(){
@@ -7,7 +6,14 @@ const ReservationService = (function(){
     const list = async () => {
         try {
             let response = await axios.get('/rooms/1/reservations');
-            return response.data.items;
+            let reservations = response.data.items;
+
+            reservations.forEach(function(reservation, index) {
+                this[index].checkin = reservation.checkin.split('T')[0];
+                this[index].checkout = reservation.checkout.split('T')[0];
+            }, reservations);
+
+            return reservations;
         } catch (err) {
             console.log(err);
         }

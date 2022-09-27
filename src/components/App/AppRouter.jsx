@@ -5,13 +5,15 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import Login from "../Login/Login";
 import CalendarPage from "../../pages/CalendarPage";
 
-const AppRouter = () => {
+const AppRouter = ({setShowProgress}) => {
     const { authState } = useContext(AuthContext);
 
     return (
         authState.authenticated
             ? <Routes>
-                    <Route path="/calendar" element={ <CalendarPage/> } />
+                    <Route path="/calendar" element={ <CalendarPage
+                        setShowProgress={setShowProgress}
+                    /> } />
                     <Route
                         path="*"
                         element={<Navigate to="/calendar" replace />}

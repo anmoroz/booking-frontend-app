@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {BrowserRouter} from "react-router-dom";
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -7,6 +7,7 @@ import Navbar from "../UI/Navbar/Navbar";
 import {AuthContext} from "../../context/AuthProvider";
 
 import './App.css';
+import Progress from "../UI/Progress/Progress";
 
 const theme = createTheme({
     palette: {
@@ -21,13 +22,15 @@ const theme = createTheme({
 
 function App() {
     const { authState, logout } = useContext(AuthContext);
+    const [showProgress, setShowProgress] = useState(false);
 
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
-                {authState.authenticated && <Navbar logout={logout}/>}
+                { authState.authenticated && <Navbar logout={logout}/> }
+                { showProgress && <Progress /> }
                 <Container fixed className="Container_main">
-                    <AppRouter/>
+                    <AppRouter setShowProgress={setShowProgress} />
                 </Container>
             </BrowserRouter>
         </ThemeProvider>

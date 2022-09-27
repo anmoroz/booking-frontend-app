@@ -51,7 +51,6 @@ const Login = () => {
         await login(email, password, successCallback, errorCallback);
     }
 
-
     return (
         <Box
             component="form"

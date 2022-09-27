@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction"
 import ReservationService from "../../api/ReservationService";
 import {buildEvent} from "../../utils/EventBuilder";
-
-import './Calendar.css'
 import ReservationForm from "../Reservation/ReservationForm";
 import ModalWindow from "../UI/Modal/ModalWindow";
 
-const Calendar = () => {
+import './Calendar.css'
+
+const Calendar = ({setShowProgress}) => {
     let reservationService = ReservationService;
-    const [calendarEvents, setCalendarEvents] = useState([]);
-    const [reservations, setReservations] = useState([]);
-    const [showForm, setShowForm] = useState(false);
-    const [selectedReservation, setSelectedReservation] = useState();
+    const [calendarEvents, setCalendarEvents] = React.useState([]);
+    const [reservations, setReservations] = React.useState([]);
+    const [showForm, setShowForm] = React.useState(false);
+    const [selectedReservation, setSelectedReservation] = React.useState();
 
     const openReservationForm = (selectedReservation) => {
         setSelectedReservation(selectedReservation);
@@ -96,11 +96,12 @@ const Calendar = () => {
         )
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         fetchReservations()
     }, [])
 
     async function fetchReservations() {
+        setShowProgress(true);
         const reservations = await reservationService.list();
         let events = [];
         reservations.forEach((reservation) => {
@@ -110,6 +111,7 @@ const Calendar = () => {
 
         setReservations(reservations);
         setCalendarEvents(events);
+        setShowProgress(false);
     }
 
     return (
