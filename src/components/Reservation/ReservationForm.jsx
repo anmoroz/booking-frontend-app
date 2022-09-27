@@ -117,6 +117,7 @@ const ReservationForm = ({selectedReservation, closeReservationForm, updateReser
                                 defaultValue={reservation.children}
                                 onChange={e => setReservation({...reservation, children: e.target.value})}
                             >
+                                <MenuItem value={0}>0</MenuItem>
                                 <MenuItem value={1}>1</MenuItem>
                                 <MenuItem value={2}>2</MenuItem>
                             </TextField>

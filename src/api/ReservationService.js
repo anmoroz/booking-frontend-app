@@ -1,9 +1,23 @@
-import axios from "axios";
+import React from 'react';
+import useAxios from "./useAxios";
 
-export default class ReservationService {
-    static async getAll() {
-        const response = await axios.get('http://localhost:3000/reservations.json')
+const ReservationService = (function(){
+    const axios = useAxios()
 
-        return response.data;
+    const list = async () => {
+        try {
+            let response = await axios.get('/rooms/1/reservations');
+            return response.data.items;
+        } catch (err) {
+            console.log(err);
+        }
+
+        return [];
     }
-}
+
+    return {
+        list: list
+    }
+})();
+
+export default ReservationService;

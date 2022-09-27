@@ -11,6 +11,7 @@ import ReservationForm from "../Reservation/ReservationForm";
 import ModalWindow from "../UI/Modal/ModalWindow";
 
 const Calendar = () => {
+    let reservationService = ReservationService;
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [reservations, setReservations] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -100,7 +101,7 @@ const Calendar = () => {
     }, [])
 
     async function fetchReservations() {
-        const reservations = await ReservationService.getAll();
+        const reservations = await reservationService.list();
         let events = [];
         reservations.forEach((reservation) => {
             let event = buildEvent(reservation)

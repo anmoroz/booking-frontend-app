@@ -1,26 +1,34 @@
 import React, {createContext, useEffect, useState} from 'react'
-import axios from "../api/axios";
+import useAxios from '../api/useAxios'
+import LocalStorageService from "../service/LocalStorageService";
 
 export const AuthContext = createContext(null);
 
+const localStorageService = LocalStorageService.getService();
+
 export const AuthProvider = ({ children }) => {
+    const api = useAxios()
+
     const [authState, setAuthState] = useState({
-        accessToken: null,
-        refreshToken: null,
-        authenticated: false
+        accessToken: localStorageService.getAccessToken(),
+        refreshToken: localStorageService.getRefreshToken(),
+        authenticated: localStorageService.getAccessToken() !== null
     });
 
     useEffect(() => {
         if (authState.authenticated) {
-            localStorage.removeItem('accessToken');
+            localStorageService.setToken({
+                accessToken: authState.accessToken,
+                refreshToken: authState.refreshToken
+            })
         } else {
-            localStorage.setItem('accessToken', authState.accessToken);
+            localStorageService.clearToken();
         }
     }, [authState])
 
-    const getAccessToken = () => {
+    /*const getAccessToken = () => {
         return authState.accessToken;
-    };
+    };*/
 
     const logout = () => {
         setAuthState({
@@ -31,8 +39,8 @@ export const AuthProvider = ({ children }) => {
     }
 
     const login = async (email, password, successCallback, errorCallback) => {
-        axios.post(
-            "/api/v1/security/authenticate",
+        api.post(
+            "/security/authenticate",
             {email: email, password: password }
         ).then((response) => {
             setAuthState({
@@ -40,7 +48,7 @@ export const AuthProvider = ({ children }) => {
                 refreshToken: response.data.refreshToken,
                 authenticated: true
             });
-            successCallback(response);
+            successCallback();
         }).catch((error) => {
             errorCallback(error);
         });
@@ -48,7 +56,6 @@ export const AuthProvider = ({ children }) => {
 
     let value = {
         authState: authState,
-        getAccessToken: getAccessToken,
         login: login,
         logout: logout
     }
