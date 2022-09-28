@@ -30,8 +30,15 @@ const ReservationService = (function(){
         return reservation;
     }
 
-    const list = async () => {
-        let response = await axios.get('/rooms/1/reservations');
+    const list = async (criteria) => {
+        console.log(criteria)
+        let response = await axios.get(
+            '/rooms/1/reservations',
+            {params: {
+                'criteria[from]': criteria.from,
+                'criteria[to]': criteria.to,
+            }}
+        );
         let reservations = response.data.items;
 
         reservations.forEach(function(reservation, index) {

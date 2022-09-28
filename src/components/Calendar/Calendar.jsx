@@ -13,10 +13,15 @@ import './Calendar.css'
 
 const Calendar = ({setShowProgress}) => {
     let reservationService = ReservationService;
+    const calendarRef = React.useRef();
     const [events, setEvents] = React.useState([]);
     const [reservations, setReservations] = React.useState([]);
     const [showForm, setShowForm] = React.useState(false);
     const [selectedReservation, setSelectedReservation] = React.useState();
+    const [criteria, setCriteria] = React.useState({
+        from: dayjs().startOf('month').add(6, 'day').format("YYYY-MM-DD"),
+        to: dayjs().startOf('month').add(37, 'day').format("YYYY-MM-DD"),
+    });
 
     const openReservationForm = (selectedReservation) => {
         setSelectedReservation(selectedReservation);
@@ -25,6 +30,26 @@ const Calendar = ({setShowProgress}) => {
     const closeReservationForm = () => {
         setSelectedReservation(undefined);
         setShowForm(false);
+    }
+
+    const handlePrevMonthClick = () => {
+        let calendarApi = calendarRef.current.getApi();
+        calendarApi.prev();
+        updateCriteria(calendarApi);
+    }
+
+    const handleNextMonthClick = () => {
+        let calendarApi = calendarRef.current.getApi();
+        calendarApi.next();
+        updateCriteria(calendarApi);
+    }
+
+    const updateCriteria = (calendarApi) => {
+        let calendarDate = calendarApi.getDate();
+        setCriteria({
+            from: dayjs(calendarDate).add(6, 'day').format("YYYY-MM-DD"),
+            to: dayjs(calendarDate).add(37, 'day').format("YYYY-MM-DD"),
+        });
     }
 
     const handleDateClick = (arg) => {
@@ -148,8 +173,8 @@ const Calendar = ({setShowProgress}) => {
     }, [])
 
     React.useEffect(() => {
-        fetchReservations()
-    }, [])
+        fetchReservations();
+    }, [criteria])
     
     async function sendDeleteReservation(reservation) {
         return await reservationService.delete(reservation);
@@ -165,7 +190,9 @@ const Calendar = ({setShowProgress}) => {
 
     async function fetchReservations() {
         setShowProgress(true);
-        const reservations = await reservationService.list();
+        setEvents([]);
+        setReservations([]);
+        const reservations = await reservationService.list(criteria);
         reservations.forEach((reservation) => {
             addReservation(reservation);
             addEvent(buildEvent(reservation));
@@ -176,15 +203,26 @@ const Calendar = ({setShowProgress}) => {
     return (
         <div>
             <FullCalendar
+                ref={calendarRef}
                 plugins={[ dayGridPlugin, interactionPlugin ]}
                 initialView="dayGridMonth"
                 weekends={true}
                 locale="ru"
                 firstDay={1}
+                customButtons={{
+                    customPrev: {
+                        text: '<',
+                        click: () => {handlePrevMonthClick()}
+                    },
+                    customNext: {
+                        text: '>',
+                        click: () => {handleNextMonthClick()}
+                    }
+                }}
                 headerToolbar={{
                     start: 'title',
                     center: '',
-                    end: 'prev,next'
+                    end: 'customPrev,customNext'
                 }}
                 dateClick={handleDateClick}
                 eventClick={handleEventClick}
