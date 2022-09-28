@@ -57,13 +57,20 @@ const Calendar = ({setShowProgress}) => {
         openReservationForm(selectedReservation);
     }
 
-    const deleteReservationHandler = (b) => {
-        setEvents(events.filter(e => e.id !== b.id))
+    const deleteReservation = (reservation, successCallback, errorCallback) => {
+        sendDeleteReservation(reservation)
+            .then(() => {
+                setEvents(events.filter(e => e.id !== reservation.id));
+                successCallback();
+            })
+            .catch((error) => {
+                errorCallback(error.response.data.message);
+            })
+            .finally(() => { setShowProgress(false) });
     }
 
-    const updateReservationHandler = (reservationFormData, successCallback, errorCallback) => {
+    const saveReservation = (reservationFormData, successCallback, errorCallback) => {
         setShowProgress(true);
-
         let reservation = {
             id: undefined,
             adults: 0,
@@ -71,7 +78,7 @@ const Calendar = ({setShowProgress}) => {
             note: "",
             checkin: undefined,
             checkout: undefined,
-            contact: null,
+            contact: undefined,
         }
         if (!reservationFormData.isNewReservation) {
             const indexReservation = reservations.findIndex(b => b.id === reservationFormData.id)
@@ -79,9 +86,9 @@ const Calendar = ({setShowProgress}) => {
         }
 
         if (!reservationFormData.isClose) {
-            if (reservationFormData.name) {
-                reservation.contact.name = reservationFormData.name
-                reservation.contact.phone = reservationFormData.phone
+            reservation.contact = {
+                name: reservationFormData.name,
+                phone: reservationFormData.phone
             }
             reservation.adults = reservationFormData.adults
             reservation.children = reservationFormData.children
@@ -101,7 +108,7 @@ const Calendar = ({setShowProgress}) => {
         )
 
         if (reservationFormData.isNewReservation) {
-            createReservation(reservation)
+            sendCreateReservation(reservation)
                 .then((createdReservation) => {
                     addReservation(createdReservation);
                     addEvent(buildEvent(createdReservation));
@@ -109,20 +116,27 @@ const Calendar = ({setShowProgress}) => {
                 })
                 .catch((error) => {
                     errorCallback(error.response.data.message);
-                });
-        } else {
-            let calendarEvent = buildEvent(reservation);
-            setEvents(
-                events.map(function (event) {
-                    if (event.id === calendarEvent.id) {
-                        return calendarEvent;
-                    }
-                    return event;
                 })
-            )
-            successCallback();
+                .finally(() => { setShowProgress(false) });
+        } else {
+            sendUpdateReservation(reservation)
+                .then((updatedReservation) => {
+                    let calendarEvent = buildEvent(updatedReservation);
+                    setEvents(
+                        events.map(function (event) {
+                            if (event.id === calendarEvent.id) {
+                                return calendarEvent;
+                            }
+                            return event;
+                        })
+                    )
+                    successCallback();
+                })
+                .catch((error) => {
+                    errorCallback(error.response.data.message);
+                })
+                .finally(() => { setShowProgress(false) });
         }
-        setShowProgress(false);
     }
 
     const addReservation = React.useCallback((newReservation) => {
@@ -136,9 +150,17 @@ const Calendar = ({setShowProgress}) => {
     React.useEffect(() => {
         fetchReservations()
     }, [])
-
-    async function createReservation(newReservation) {
+    
+    async function sendDeleteReservation(reservation) {
+        return await reservationService.delete(reservation);
+    }
+    
+    async function sendCreateReservation(newReservation) {
         return await reservationService.create(newReservation);
+    }
+
+    async function sendUpdateReservation(updatedReservation) {
+        return await reservationService.update(updatedReservation);
     }
 
     async function fetchReservations() {
@@ -177,8 +199,8 @@ const Calendar = ({setShowProgress}) => {
                 content={<ReservationForm
                     selectedReservation={selectedReservation}
                     closeReservationForm={closeReservationForm}
-                    updateReservationHandler={updateReservationHandler}
-                    deleteReservationHandler={deleteReservationHandler}
+                    saveReservation={saveReservation}
+                    deleteReservation={deleteReservation}
                 />}
             />
         </div>

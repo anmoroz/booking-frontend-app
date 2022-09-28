@@ -21,11 +21,12 @@ import './ReservationForm.css';
 const ReservationForm = ({
      selectedReservation,
      closeReservationForm,
-     updateReservationHandler,
-     deleteReservationHandler
+     saveReservation,
+     deleteReservation
 }) => {
     const [showConfirmDialog, setShowConfirmDialog] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState(false)
+    const [errorMessage, setErrorMessage] = React.useState(false);
+    const [blockButtons, setBlockButtons] = React.useState(false);
 
     const [reservation, setReservation] = React.useState({
         id: (selectedReservation.hasOwnProperty('id')) ? selectedReservation.id : undefined,
@@ -42,31 +43,43 @@ const ReservationForm = ({
 
     const saveReservationFormHandler = (event) => {
         event.preventDefault();
-        updateReservationHandler(
+        setBlockButtons(true);
+        saveReservation(
             reservation,
             () => {
                 closeReservationForm();
                 setErrorMessage(false);
+                setBlockButtons(false);
             },
             (message) => {
-                setErrorMessage(message)
+                setErrorMessage(message);
+                setBlockButtons(false);
             }
         )
-
     }
 
-    const deleteReservation = () => {
-        deleteReservationHandler(selectedReservation)
-        closeReservationForm()
+    const deleteReservationHandler = () => {
+        setBlockButtons(true);
+        deleteReservation(
+            selectedReservation,
+            () => {
+                closeReservationForm();
+                setErrorMessage(false);
+                setBlockButtons(false);
+            },
+            (message) => {
+                setErrorMessage(message);
+                setBlockButtons(false);
+            }
+        )
     }
 
     return (
         <div>
-
             {
                 errorMessage &&
                 <Stack sx={{ width: '100%' }} spacing={2}>
-                    <Alert variant="filled" severity="error">
+                    <Alert variant="filled" severity="error" style={{whiteSpace: "pre-wrap"}}>
                         {errorMessage}
                     </Alert>
                 </Stack>
@@ -87,7 +100,12 @@ const ReservationForm = ({
                                     control={
                                         <Switch
                                             defaultChecked
-                                            onChange={e => setReservation({...reservation, isClose: e.target.checked})}
+                                            onChange={
+                                                (e) => {
+                                                    setReservation({...reservation, isClose: e.target.checked});
+                                                    setErrorMessage(false);
+                                                }
+                                        }
                                         />
                                     }
                                     label="Закрыть бронь"
@@ -223,6 +241,7 @@ const ReservationForm = ({
                     variant="contained"
                     size="small"
                     onClick={saveReservationFormHandler}
+                    disabled={blockButtons}
                 >
                     Сохранить
                 </Button>
@@ -236,6 +255,7 @@ const ReservationForm = ({
                             size="small"
                             style={{marginRight: "5px"}}
                             onClick={() => setShowConfirmDialog(true)}
+                            disabled={blockButtons}
                         >
                             {reservation.isClose ? "Открыть бронирование" : "Отменить бронирование"}
                         </Button>
@@ -246,7 +266,7 @@ const ReservationForm = ({
             <ConfirmDialog
                 showConfirmDialog={showConfirmDialog}
                 setShowConfirmDialog={setShowConfirmDialog}
-                callback={() => {deleteReservation()}}
+                callback={() => {deleteReservationHandler()}}
                 dialogText={reservation.isClose ? "Вы действительно хотите открыть бронирование?" : "Вы действительно хотите удалить бронь?"}
             />
         </div>

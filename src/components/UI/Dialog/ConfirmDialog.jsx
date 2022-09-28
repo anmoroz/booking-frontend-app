@@ -5,16 +5,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from "@mui/material/Button";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 
 const ConfirmDialog = ({showConfirmDialog, setShowConfirmDialog, callback, dialogText}) => {
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const handleClose = () => {
         setShowConfirmDialog(false);
     };
+
     const handleConfirm = () => {
         setShowConfirmDialog(false);
         callback();
@@ -22,7 +19,7 @@ const ConfirmDialog = ({showConfirmDialog, setShowConfirmDialog, callback, dialo
 
     return (
         <Dialog
-            fullScreen={fullScreen}
+            fullScreen={false}
             open={showConfirmDialog}
             onClose={handleClose}
             aria-labelledby="responsive-dialog-title"
