@@ -31,7 +31,6 @@ const ReservationService = (function(){
     }
 
     const list = async (criteria) => {
-        console.log(criteria)
         let response = await axios.get(
             '/rooms/1/reservations',
             {params: {

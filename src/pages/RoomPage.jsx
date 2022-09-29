@@ -1,9 +1,115 @@
 import React from 'react';
+import RoomList from "../components/Room/RoomList";
+import RoomService from "../api/RoomService";
+import Typography from "@mui/material/Typography";
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import ModalWindow from "../components/UI/Modal/ModalWindow";
+import RoomForm from "../components/Room/RoomForm";
 
 const RoomPage = ({setShowProgress}) => {
+    const [rooms, setRooms] = React.useState([]);
+    const [fetchingRooms, setFetchingRooms] = React.useState(true);
+    const [showForm, setShowForm] = React.useState(false);
+    const [editedRoom, setEditedRoom] = React.useState(null);
+
+    const roomService = RoomService;
+
+    async function fetchRooms() {
+        setShowProgress(true);
+        await roomService.list()
+            .then((roomList) => {
+                setRooms(roomList);
+            })
+            .catch(() => {
+
+            });
+        setShowProgress(false);
+        setFetchingRooms(false);
+    }
+
+    const selectRoom = (room) => {
+        setEditedRoom(room);
+        setShowForm(true);
+    }
+
+    const saveRoom = async (room, successCallback, errorCallback) => {
+        setShowProgress(true);
+        if (!room.hasOwnProperty('id')) {
+            await roomService.create(room)
+                .then((createdRoom) => {
+                    setEditedRoom(null);
+                    addRoom(createdRoom);
+                    successCallback();
+                })
+                .catch((error) => {
+                    errorCallback(error.response.data.message);
+                })
+                .finally(() => { setShowProgress(false) });
+        } else {
+            await roomService.update(room)
+                .then((updatedRoom) => {
+                    setEditedRoom(null);
+                    setRooms(
+                        rooms.map(function (roomItem) {
+                            if (roomItem.id === updatedRoom.id) {
+                                return updatedRoom;
+                            }
+                            return roomItem;
+                        })
+                    );
+                    successCallback();
+                })
+                .catch((error) => {
+                    errorCallback(error.response.data.message);
+                })
+                .finally(() => { setShowProgress(false) });
+        }
+    }
+
+    const addRoom = React.useCallback((newRoom) => {
+        setRooms(rooms => ([ ...rooms, newRoom ]))
+    }, [])
+
+    const closeForm = () => {
+        setShowForm(false);
+    }
+
+    React.useEffect(() => {
+        fetchRooms();
+    }, [])
+
     return (
         <div>
-            Room
+            {
+                fetchingRooms
+                ? <Typography align="center" variant="h6" component="h5">
+                    Загрузка объектов размещения
+                </Typography>
+                : <div>
+                    <RoomList rooms={rooms} selectRoom={selectRoom} />
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                            setEditedRoom({name: '', address: ''});
+                            setShowForm(true);
+                        }}
+                    >
+                        Создать
+                    </Button>
+                    <ModalWindow
+                        open={showForm}
+                        handleClose={closeForm}
+                        content={<RoomForm
+                            editedRoom={editedRoom}
+                            save={saveRoom}
+                            closeForm={closeForm}
+                        />}
+                    />
+                </div>
+            }
         </div>
     );
 };

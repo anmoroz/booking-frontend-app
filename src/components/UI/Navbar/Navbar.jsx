@@ -12,7 +12,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 
 const pages = [
-    {title: 'Объекты', url: 'room'},
+    {title: 'Объекты размещения', url: 'room'},
     {title: 'Бронирования', url: 'reservation'},
     {title: 'Календарь', url: 'calendar'}
 ];
