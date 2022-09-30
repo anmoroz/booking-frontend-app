@@ -7,26 +7,11 @@ import AddIcon from '@mui/icons-material/Add';
 import ModalWindow from "../components/UI/Modal/ModalWindow";
 import RoomForm from "../components/Room/RoomForm";
 
-const RoomPage = ({setShowProgress}) => {
-    const [rooms, setRooms] = React.useState([]);
-    const [fetchingRooms, setFetchingRooms] = React.useState(true);
+const RoomPage = (props) => {
     const [showForm, setShowForm] = React.useState(false);
     const [editedRoom, setEditedRoom] = React.useState(null);
 
     const roomService = RoomService;
-
-    async function fetchRooms() {
-        setShowProgress(true);
-        await roomService.list()
-            .then((roomList) => {
-                setRooms(roomList);
-            })
-            .catch(() => {
-
-            });
-        setShowProgress(false);
-        setFetchingRooms(false);
-    }
 
     const selectRoom = (room) => {
         setEditedRoom(room);
@@ -34,7 +19,7 @@ const RoomPage = ({setShowProgress}) => {
     }
 
     const saveRoom = async (room, successCallback, errorCallback) => {
-        setShowProgress(true);
+        props.setShowProgress(true);
         if (!room.hasOwnProperty('id')) {
             await roomService.create(room)
                 .then((createdRoom) => {
@@ -45,13 +30,13 @@ const RoomPage = ({setShowProgress}) => {
                 .catch((error) => {
                     errorCallback(error.response.data.message);
                 })
-                .finally(() => { setShowProgress(false) });
+                .finally(() => { props.setShowProgress(false) });
         } else {
             await roomService.update(room)
                 .then((updatedRoom) => {
                     setEditedRoom(null);
-                    setRooms(
-                        rooms.map(function (roomItem) {
+                    props.setRoomList(
+                        props.roomList.map(function (roomItem) {
                             if (roomItem.id === updatedRoom.id) {
                                 return updatedRoom;
                             }
@@ -63,31 +48,27 @@ const RoomPage = ({setShowProgress}) => {
                 .catch((error) => {
                     errorCallback(error.response.data.message);
                 })
-                .finally(() => { setShowProgress(false) });
+                .finally(() => { props.setShowProgress(false) });
         }
     }
 
     const addRoom = React.useCallback((newRoom) => {
-        setRooms(rooms => ([ ...rooms, newRoom ]))
+        props.setRoomList(rooms => ([ ...rooms, newRoom ]))
     }, [])
 
     const closeForm = () => {
         setShowForm(false);
     }
 
-    React.useEffect(() => {
-        fetchRooms();
-    }, [])
-
     return (
         <div>
             {
-                fetchingRooms
+                !props.roomList.length
                 ? <Typography align="center" variant="h6" component="h5">
                     Загрузка объектов размещения
                 </Typography>
                 : <div>
-                    <RoomList rooms={rooms} selectRoom={selectRoom} />
+                    <RoomList rooms={props.roomList} selectRoom={selectRoom} />
                     <Button
                         variant="outlined"
                         size="small"

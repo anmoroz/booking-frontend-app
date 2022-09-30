@@ -1,9 +1,9 @@
 import React from 'react';
 import Calendar from "../components/Calendar/Calendar";
 
-const CalendarPage = ({setShowProgress}) => {
+const CalendarPage = (props) => {
     return (
-        <Calendar setShowProgress={setShowProgress} />
+        <Calendar {...props} />
     );
 };
 

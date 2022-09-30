@@ -11,8 +11,8 @@ import dayjs from "dayjs";
 
 import './Calendar.css'
 
-const Calendar = ({setShowProgress}) => {
-    let reservationService = ReservationService;
+const Calendar = (props) => {
+    const reservationService = ReservationService;
     const calendarRef = React.useRef();
     const [events, setEvents] = React.useState([]);
     const [reservations, setReservations] = React.useState([]);
@@ -27,6 +27,7 @@ const Calendar = ({setShowProgress}) => {
         setSelectedReservation(selectedReservation);
         setShowForm(true);
     }
+
     const closeReservationForm = () => {
         setSelectedReservation(undefined);
         setShowForm(false);
@@ -91,11 +92,11 @@ const Calendar = ({setShowProgress}) => {
             .catch((error) => {
                 errorCallback(error.response.data.message);
             })
-            .finally(() => { setShowProgress(false) });
+            .finally(() => { props.setShowProgress(false) });
     }
 
     const saveReservation = (reservationFormData, successCallback, errorCallback) => {
-        setShowProgress(true);
+        props.setShowProgress(true);
         let reservation = {
             id: undefined,
             adults: 0,
@@ -142,7 +143,7 @@ const Calendar = ({setShowProgress}) => {
                 .catch((error) => {
                     errorCallback(error.response.data.message);
                 })
-                .finally(() => { setShowProgress(false) });
+                .finally(() => { props.setShowProgress(false) });
         } else {
             sendUpdateReservation(reservation)
                 .then((updatedReservation) => {
@@ -160,7 +161,7 @@ const Calendar = ({setShowProgress}) => {
                 .catch((error) => {
                     errorCallback(error.response.data.message);
                 })
-                .finally(() => { setShowProgress(false) });
+                .finally(() => { props.setShowProgress(false) });
         }
     }
 
@@ -174,30 +175,32 @@ const Calendar = ({setShowProgress}) => {
 
     React.useEffect(() => {
         fetchReservations();
-    }, [criteria])
+    }, [criteria, props.selectedRoom])
     
     async function sendDeleteReservation(reservation) {
-        return await reservationService.delete(reservation);
+        return await reservationService.delete(props.selectedRoom, reservation);
     }
     
     async function sendCreateReservation(newReservation) {
-        return await reservationService.create(newReservation);
+        return await reservationService.create(props.selectedRoom, newReservation);
     }
 
     async function sendUpdateReservation(updatedReservation) {
-        return await reservationService.update(updatedReservation);
+        return await reservationService.update(props.selectedRoom, updatedReservation);
     }
 
     async function fetchReservations() {
-        setShowProgress(true);
+        props.setShowProgress(true);
         setEvents([]);
         setReservations([]);
-        const reservations = await reservationService.list(criteria);
-        reservations.forEach((reservation) => {
-            addReservation(reservation);
-            addEvent(buildEvent(reservation));
-        })
-        setShowProgress(false);
+        if (props.selectedRoom) {
+            const reservations = await reservationService.list(props.selectedRoom, criteria);
+            reservations.forEach((reservation) => {
+                addReservation(reservation);
+                addEvent(buildEvent(reservation));
+            })
+        }
+        props.setShowProgress(false);
     }
 
     return (

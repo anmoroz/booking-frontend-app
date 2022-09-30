@@ -8,8 +8,11 @@ const ReservationService = (function(){
         reservation.checkout = reservation.checkout.split('T')[0];
     }
 
-    const update = async (updatedReservation) => {
-        let response = await axios.put(`/rooms/1/reservations/${updatedReservation.id}`, updatedReservation);
+    const update = async (selectedRoom, updatedReservation) => {
+        let response = await axios.put(
+            `/rooms/${selectedRoom.id}/reservations/${updatedReservation.id}`,
+            updatedReservation
+        );
         let reservation = response.data;
 
         transformReservationDates(reservation);
@@ -17,12 +20,12 @@ const ReservationService = (function(){
         return reservation;
     }
 
-    const del = async (reservation) => {
-        await axios.delete(`/rooms/1/reservations/${reservation.id}`);
+    const del = async (selectedRoom, reservation) => {
+        await axios.delete(`/rooms/${selectedRoom.id}/reservations/${reservation.id}`);
     }
 
-    const create = async (newReservation) => {
-        let response = await axios.post('/rooms/1/reservations', newReservation);
+    const create = async (selectedRoom, newReservation) => {
+        let response = await axios.post(`/rooms/${selectedRoom.id}/reservations`, newReservation);
         let reservation = response.data;
 
         transformReservationDates(reservation);
@@ -30,9 +33,9 @@ const ReservationService = (function(){
         return reservation;
     }
 
-    const list = async (criteria) => {
+    const list = async (selectedRoom, criteria) => {
         let response = await axios.get(
-            '/rooms/1/reservations',
+            `/rooms/${selectedRoom.id}/reservations`,
             {params: {
                 'criteria[from]': criteria.from,
                 'criteria[to]': criteria.to,
