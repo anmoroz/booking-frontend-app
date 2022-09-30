@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import ModalWindow from "../Modal/ModalWindow";
 import RoomSelectorForm from "./RoomSelectorForm";
 import HouseIcon from '@mui/icons-material/House';
+import WarningIcon from '@mui/icons-material/WarningAmber';
 
 import "./TopBar.css";
 
@@ -41,10 +42,13 @@ const TopBar = ({roomList, selectedRoom, setSelectedRoom}) => {
                     {
                         selectedRoom
                         ? <div>
-                                <HouseIcon  className="TopBar_icon" />
+                                <HouseIcon className="TopBar_icon" />
                                 {selectedRoom.name}
-                        </div>
-                        : 'Выберете объект размещения'
+                          </div>
+                        : <div>
+                                <WarningIcon className="TopBar_icon TopBar_icon_warning" />
+                                Выберете объект размещения
+                          </div>
                     }
                 </div>
 

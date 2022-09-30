@@ -1,5 +1,4 @@
 import React from 'react';
-
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction"
@@ -7,6 +6,7 @@ import ReservationService from "../../api/ReservationService";
 import {buildEvent} from "../../utils/EventBuilder";
 import ReservationForm from "../Reservation/ReservationForm";
 import ModalWindow from "../UI/Modal/ModalWindow";
+import Alert from '@mui/material/Alert';
 import dayjs from "dayjs";
 
 import './Calendar.css'
@@ -205,6 +205,12 @@ const Calendar = (props) => {
 
     return (
         <div>
+            {
+                !props.selectedRoom &&
+                <Alert variant="outlined" severity="warning" style={{marginBottom: '16px'}}>
+                    Не выбран объект размещения!
+                </Alert>
+            }
             <FullCalendar
                 ref={calendarRef}
                 plugins={[ dayGridPlugin, interactionPlugin ]}
