@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 const pages = [
     {title: 'Объекты размещения', url: 'room'},
+    {title: 'Контакты', url: 'contact'},
     {title: 'Бронирования', url: 'reservation'},
     {title: 'Календарь', url: 'calendar'}
 ];

@@ -1,10 +1,10 @@
 import React from 'react';
-import Stack from "@mui/material/Stack";
-import Alert from "@mui/material/Alert";
 import Grid from "@mui/material/Grid";
 import {TextField} from "@mui/material";
 import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
+import ErrorAlert from "../UI/Alert/ErrorAlert";
+import Typography from "@mui/material/Typography";
 
 const RoomForm = ({editedRoom, save, closeForm}) => {
     const [errorMessage, setErrorMessage] = React.useState(false);
@@ -30,14 +30,13 @@ const RoomForm = ({editedRoom, save, closeForm}) => {
 
     return (
         <div>
-            {
-                errorMessage &&
-                <Stack sx={{ width: '100%' }} spacing={2}>
-                    <Alert variant="filled" severity="error" style={{whiteSpace: "pre-wrap"}}>
-                        {errorMessage}
-                    </Alert>
-                </Stack>
-            }
+
+            <Box sx={{ flexGrow: 1 }} m={1} p={1}>
+                <Typography variant="h6" component="h5">
+                    {room.hasOwnProperty("id") ? "Редактирование" : "Новый объект"}
+                </Typography>
+            </Box>
+            <ErrorAlert errorMessage={errorMessage} />
             <Box sx={{ flexGrow: 1 }} m={1} p={1}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

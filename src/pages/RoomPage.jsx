@@ -60,37 +60,35 @@ const RoomPage = (props) => {
         setShowForm(false);
     }
 
+    if (!props.roomList.length) {
+        return <Typography align="center" variant="h6" component="h5">
+            Загрузка объектов размещения
+        </Typography>
+    }
+
     return (
         <div>
-            {
-                !props.roomList.length
-                ? <Typography align="center" variant="h6" component="h5">
-                    Загрузка объектов размещения
-                </Typography>
-                : <div>
-                    <RoomList rooms={props.roomList} selectRoom={selectRoom} />
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<AddIcon />}
-                        onClick={() => {
-                            setEditedRoom({name: '', address: ''});
-                            setShowForm(true);
-                        }}
-                    >
-                        Создать
-                    </Button>
-                    <ModalWindow
-                        open={showForm}
-                        handleClose={closeForm}
-                        content={<RoomForm
-                            editedRoom={editedRoom}
-                            save={saveRoom}
-                            closeForm={closeForm}
-                        />}
-                    />
-                </div>
-            }
+            <RoomList rooms={props.roomList} selectRoom={selectRoom} />
+            <Button
+                variant="outlined"
+                size="small"
+                startIcon={<AddIcon />}
+                onClick={() => {
+                    setEditedRoom({name: '', address: ''});
+                    setShowForm(true);
+                }}
+            >
+                Создать
+            </Button>
+            <ModalWindow
+                open={showForm}
+                handleClose={closeForm}
+                content={<RoomForm
+                    editedRoom={editedRoom}
+                    save={saveRoom}
+                    closeForm={closeForm}
+                />}
+            />
         </div>
     );
 };
