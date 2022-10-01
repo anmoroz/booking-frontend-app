@@ -15,10 +15,19 @@ const ContactService = (function() {
         return response.data;
     }
 
-    const list = async () => {
-        let response = await axios.get('/contacts');
+    const list = async (page, limit, filter) => {
+        let response = await axios.get(
+            '/contacts',
+            {
+                params: {
+                    page: page,
+                    perPage: limit,
+                    'criteria[keyword]': filter.query
+                }
+            }
+        );
 
-        return response.data.items;
+        return response.data;
     }
 
     return {

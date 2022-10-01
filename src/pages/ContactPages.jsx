@@ -6,11 +6,20 @@ import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import ContactForm from "../components/Contact/ContactForm";
 import ModalWindow from "../components/UI/Modal/ModalWindow";
+import SearchPanel from "../components/Contact/SearchPanel";
+import {useFetching} from "../hooks/useFetching";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 
 const ContactPages = (props) => {
     const [contactList, setContactList] = React.useState([]);
     const [showForm, setShowForm] = React.useState(false);
     const [editedContact, setEditedContact] = React.useState(null);
+    const [filter, setFilter] = React.useState({sort: '', query: ''});
+    const [totalPages, setTotalPages] = React.useState(0);
+    const [limit, setLimit] = React.useState(10);
+    const [page, setPage] = React.useState(1);
 
     const contactService = ContactService;
 
@@ -61,32 +70,41 @@ const ContactPages = (props) => {
         setShowForm(false);
     }
 
-    const fetchContactList = async () => {
-        props.setShowProgress(true);
-        await contactService.list()
-            .then((contactList) => {
-                setContactList(contactList);
-            })
-            .catch(() => {
-
-            });
-        props.setShowProgress(false);
-    }
-
     React.useEffect(() => {
-        fetchContactList();
-    }, [])
+        fetchContactList(page, limit, filter);
+    }, [page, limit, filter])
 
+    const [fetchContactList, contactError] = useFetching(async (page, limit, filter) => {
+        props.setShowProgress(true);
+        const response = await contactService.list(page, limit, filter);
+        setContactList(response.items);
+        const totalCount = response.meta.totalCount;
+        setTotalPages(Math.ceil(totalCount / limit));
+        props.setShowProgress(false);
+    })
 
-    if (!contactList.length) {
+    const handleChangePage = (e, page) => {
+        setPage(page);
+    };
+
+    /*if (!contactList.length) {
         return <Typography align="center" variant="h6" component="h5">
             Загрузка списка контактов
         </Typography>
-    }
+    }*/
 
     return (
         <div>
+            <Typography variant="h5" component="h4">
+                Ваши контакты
+            </Typography>
+            <SearchPanel filter={filter} setFilter={setFilter} />
             <ContactList contactList={contactList} selectContactHandler={selectContactHandler} />
+
+            <Stack spacing={2} alignItems="center">
+                <Pagination count={totalPages} page={page} color="primary" onChange={handleChangePage} />
+            </Stack>
+
             <Button
                 variant="outlined"
                 size="small"
