@@ -7,7 +7,8 @@ import Typography from "@mui/material/Typography";
 import Chip from '@mui/material/Chip';
 import WarningIcon from '@mui/icons-material/ErrorOutline';
 
-const ContactItem = ({contact, selectContactHandler}) => {
+const ContactItem = ({contact, selectContactHandler, contactViewHandler}) => {
+
     return (
         <ListItem
             alignItems="flex-start"
@@ -21,6 +22,8 @@ const ContactItem = ({contact, selectContactHandler}) => {
             }
         >
             <ListItemText
+                onClick={() => {contactViewHandler(contact)}}
+                sx={{cursor: 'pointer'}}
                 primary={contact.phone}
                 secondary={
                     <React.Fragment>

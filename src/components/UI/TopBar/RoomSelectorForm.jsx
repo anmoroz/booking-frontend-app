@@ -9,6 +9,8 @@ const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
         options.push({label: room.name, room: room});
     })
 
+    console.log('roomList', roomList, options)
+
     return (
         <div>
             <Autocomplete

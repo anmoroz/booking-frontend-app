@@ -56,6 +56,7 @@ const TopBar = ({roomList, selectedRoom, setSelectedRoom}) => {
             <ModalWindow
                 open={showRoomSelector}
                 handleClose={closeRoomSelector}
+                hideCloseButton={true}
                 content={<RoomSelectorForm
                     roomList={roomList}
                     selectedRoom={selectedRoom}

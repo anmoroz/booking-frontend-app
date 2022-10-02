@@ -110,7 +110,7 @@ const ContactPages = (props) => {
                 size="small"
                 startIcon={<AddIcon />}
                 onClick={() => {
-                    setEditedContact({phone: '', name: '', note: '', isBanned: false});
+                    setEditedContact({phone: '', name: '', note: '', isBanned: false, lastReservation: null});
                     setShowForm(true);
                 }}
             >
