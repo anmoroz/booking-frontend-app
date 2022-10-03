@@ -13,6 +13,7 @@ const ContactList = ({contactList, selectContactHandler}) => {
         setSelectedContact(contact);
         setOpenView(true);
     }
+
     const closeView = () => {
         setOpenView(false);
     }

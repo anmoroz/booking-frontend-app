@@ -194,7 +194,7 @@ const Calendar = (props) => {
         setEvents([]);
         setReservations([]);
         if (props.selectedRoom) {
-            const reservations = await reservationService.list(props.selectedRoom, criteria);
+            const reservations = await reservationService.listByRoom(props.selectedRoom, criteria);
             reservations.forEach((reservation) => {
                 addReservation(reservation);
                 addEvent(buildEvent(reservation));

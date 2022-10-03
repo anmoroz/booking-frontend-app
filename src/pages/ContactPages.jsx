@@ -16,7 +16,7 @@ const ContactPages = (props) => {
     const [contactList, setContactList] = React.useState([]);
     const [showForm, setShowForm] = React.useState(false);
     const [editedContact, setEditedContact] = React.useState(null);
-    const [filter, setFilter] = React.useState({sort: '', query: ''});
+    const [filter, setFilter] = React.useState({sort: '', keyword: ''});
     const [totalPages, setTotalPages] = React.useState(0);
     const [limit, setLimit] = React.useState(10);
     const [page, setPage] = React.useState(1);
@@ -87,24 +87,19 @@ const ContactPages = (props) => {
         setPage(page);
     };
 
-    /*if (!contactList.length) {
-        return <Typography align="center" variant="h6" component="h5">
-            Загрузка списка контактов
-        </Typography>
-    }*/
-
     return (
         <div>
             <Typography variant="h5" component="h4">
-                Ваши контакты
+                Контакты
             </Typography>
             <SearchPanel filter={filter} setFilter={setFilter} />
             <ContactList contactList={contactList} selectContactHandler={selectContactHandler} />
-
-            <Stack spacing={2} alignItems="center">
-                <Pagination count={totalPages} page={page} color="primary" onChange={handleChangePage} />
-            </Stack>
-
+            {
+                totalPages > 1 &&
+                <Stack spacing={2} alignItems="center">
+                    <Pagination count={totalPages} page={page} color="primary" onChange={handleChangePage}/>
+                </Stack>
+            }
             <Button
                 variant="outlined"
                 size="small"

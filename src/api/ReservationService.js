@@ -33,7 +33,34 @@ const ReservationService = (function(){
         return reservation;
     }
 
-    const list = async (selectedRoom, criteria) => {
+    const list = async (page, limit, criteria) => {
+        let params = {
+            page: page,
+            perPage: limit
+        };
+
+        let paramList = ['roomId', 'keyword', 'from', 'to'];
+        paramList.forEach((paramName) => {
+            if (criteria.hasOwnProperty(paramName)) {
+                let val = criteria[paramName];
+                if (paramName === 'from' || paramName === 'to') {
+                    val = criteria[paramName].format("YYYY-MM-DD")
+                }
+                params[`criteria[${paramName}]`] = val;
+            }
+        })
+
+
+
+        let response = await axios.get(
+            `/reservations`,
+            {params: params}
+        );
+
+        return response.data;
+    }
+
+    const listByRoom = async (selectedRoom, criteria) => {
         let response = await axios.get(
             `/rooms/${selectedRoom.id}/reservations`,
             {params: {
@@ -53,6 +80,7 @@ const ReservationService = (function(){
 
     return {
         list: list,
+        listByRoom: listByRoom,
         create: create,
         update: update,
         delete: del

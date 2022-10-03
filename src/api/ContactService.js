@@ -22,7 +22,7 @@ const ContactService = (function() {
                 params: {
                     page: page,
                     perPage: limit,
-                    'criteria[keyword]': filter.query
+                    'criteria[keyword]': filter.keyword
                 }
             }
         );
