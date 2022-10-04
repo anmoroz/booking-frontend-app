@@ -7,22 +7,12 @@ import WarningIcon from '@mui/icons-material/WarningAmber';
 
 import "./TopBar.css";
 
-const TopBar = ({roomList, selectedRoom, setSelectedRoom}) => {
-    const [showRoomSelector, setShowRoomSelector] = React.useState(false);
-
-    const openRoomSelector = () => {
-        setShowRoomSelector(true);
-    }
-
-    const closeRoomSelector = () => {
-        setShowRoomSelector(false)
-    }
-
+const TopBar = (props) => {
     const onChangeRoomSelector = (event, option) => {
         if (option) {
-            setSelectedRoom(option.room);
+            props.setSelectedRoom(option.room);
         }
-        closeRoomSelector();
+        props.closeRoomSelector();
     }
 
     return (
@@ -36,14 +26,14 @@ const TopBar = ({roomList, selectedRoom, setSelectedRoom}) => {
                         opacity: [0.9, 0.8, 0.7],
                     }
                 }}
-                onClick={openRoomSelector}
+                onClick={props.openRoomSelector}
             >
                 <div className="TopBar_main_wrapper">
                     {
-                        selectedRoom
+                        props.selectedRoom
                         ? <div>
                                 <HouseIcon className="TopBar_icon" />
-                                {selectedRoom.name}
+                                {props.selectedRoom.name}
                           </div>
                         : <div>
                                 <WarningIcon className="TopBar_icon TopBar_icon_warning" />
@@ -54,12 +44,12 @@ const TopBar = ({roomList, selectedRoom, setSelectedRoom}) => {
 
             </Box>
             <ModalWindow
-                open={showRoomSelector}
-                handleClose={closeRoomSelector}
+                open={props.showRoomSelector}
+                handleClose={props.closeRoomSelector}
                 hideCloseButton={true}
                 content={<RoomSelectorForm
-                    roomList={roomList}
-                    selectedRoom={selectedRoom}
+                    roomList={props.roomList}
+                    selectedRoom={props.selectedRoom}
                     onChangeRoomSelector={onChangeRoomSelector}
                 />}
             />

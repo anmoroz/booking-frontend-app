@@ -29,13 +29,11 @@ const ReservationPage = (props) => {
     const [contactKeyword, setContactKeyword] = React.useState();
 
     const [fetchReservationList, isLoading, error] = useFetching(async (page, limit, filter) => {
-        props.setShowProgress(true);
         setReservations([]);
         let response = await reservationService.list(page, limit, filter);
         setReservations(response.items);
         const totalCount = response.meta.totalCount;
         setTotalPages(Math.ceil(totalCount / limit));
-        props.setShowProgress(false);
     })
 
     const handleChangePage = (e, page) => {
@@ -75,7 +73,7 @@ const ReservationPage = (props) => {
                                 {...filter, from: date}
                             )
                         }}
-                        renderInput={(params) => <TextField size="small" {...params} />}
+                        renderInput={(params) => <TextField style={{marginRight: '10px'}} size="small" {...params} />}
                     />
                     <DesktopDatePicker
                         label="Прибытие до"
@@ -86,11 +84,11 @@ const ReservationPage = (props) => {
                                 {...filter, to: date}
                             )
                         }}
-                        renderInput={(params) => <TextField style={{marginLeft: '10px'}} size="small" {...params} />}
+                        renderInput={(params) => <TextField size="small" {...params} />}
                     />
                 </LocalizationProvider>
             </Box>
-            <ReservationList reservations={reservations} />
+            <ReservationList reservations={reservations} isLoading={isLoading} />
             {
                 totalPages > 1 &&
                 <Stack spacing={2} alignItems="center" style={{ marginTop: '10px' }}>

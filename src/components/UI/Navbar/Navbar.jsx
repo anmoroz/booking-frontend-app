@@ -11,17 +11,24 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 
-const pages = [
-    {title: 'Объекты размещения', url: 'room'},
-    {title: 'Контакты', url: 'contact'},
-    {title: 'Бронирования', url: 'reservation'},
-    {title: 'Календарь', url: 'calendar'}
-];
 
-const Navbar = ({logout}) => {
+const Navbar = ({logout, roomList}) => {
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    let pages = [
+        {title: 'Объекты размещения', url: 'room'},
+        {title: 'Контакты', url: 'contact'},
+        {title: 'Бронирования', url: 'reservation'},
+        {title: 'Календарь', url: 'calendar'}
+    ];
+    if (roomList.length === 0) {
+        pages = [
+            {title: 'Объекты размещения', url: 'room'},
+            {title: 'Контакты', url: 'contact'}
+        ];
+    }
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);

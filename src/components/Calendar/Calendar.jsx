@@ -19,11 +19,15 @@ const Calendar = (props) => {
     const [showForm, setShowForm] = React.useState(false);
     const [selectedReservation, setSelectedReservation] = React.useState();
     const [criteria, setCriteria] = React.useState({
-        from: dayjs().startOf('month').add(6, 'day').format("YYYY-MM-DD"),
+        from: dayjs().startOf('month').add(-6, 'day').format("YYYY-MM-DD"),
         to: dayjs().startOf('month').add(37, 'day').format("YYYY-MM-DD"),
     });
 
     const openReservationForm = (selectedReservation) => {
+        if (!props.selectedRoom) {
+            props.openRoomSelector();
+            return;
+        }
         setSelectedReservation(selectedReservation);
         setShowForm(true);
     }
@@ -34,12 +38,20 @@ const Calendar = (props) => {
     }
 
     const handlePrevMonthClick = () => {
+        if (!props.selectedRoom) {
+            props.openRoomSelector();
+            return;
+        }
         let calendarApi = calendarRef.current.getApi();
         calendarApi.prev();
         updateCriteria(calendarApi);
     }
 
     const handleNextMonthClick = () => {
+        if (!props.selectedRoom) {
+            props.openRoomSelector();
+            return;
+        }
         let calendarApi = calendarRef.current.getApi();
         calendarApi.next();
         updateCriteria(calendarApi);

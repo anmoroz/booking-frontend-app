@@ -10,7 +10,8 @@ import SearchPanel from "../components/Contact/SearchPanel";
 import {useFetching} from "../hooks/useFetching";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from "@mui/material/Box";
 
 const ContactPages = (props) => {
     const [contactList, setContactList] = React.useState([]);
@@ -74,13 +75,11 @@ const ContactPages = (props) => {
         fetchContactList(page, limit, filter);
     }, [page, limit, filter])
 
-    const [fetchContactList, contactError] = useFetching(async (page, limit, filter) => {
-        props.setShowProgress(true);
+    const [fetchContactList, isLoading, error] = useFetching(async (page, limit, filter) => {
         const response = await contactService.list(page, limit, filter);
         setContactList(response.items);
         const totalCount = response.meta.totalCount;
         setTotalPages(Math.ceil(totalCount / limit));
-        props.setShowProgress(false);
     })
 
     const handleChangePage = (e, page) => {
@@ -88,12 +87,24 @@ const ContactPages = (props) => {
     };
 
     return (
-        <div>
+        <React.Fragment>
             <Typography variant="h5" component="h4">
                 Контакты
             </Typography>
-            <SearchPanel filter={filter} setFilter={setFilter} />
-            <ContactList contactList={contactList} selectContactHandler={selectContactHandler} />
+            {
+                isLoading
+                    ? <Box display="flex" justifyContent="center"><CircularProgress /></Box>
+                    : <React.Fragment>
+                            <SearchPanel filter={filter} setFilter={setFilter} />
+                            {
+                                !isLoading && contactList.length === 0
+                                    ? <Box display="flex" justifyContent="center" m={1} p={1}>
+                                        <Typography variant="h5" component="h5">Нет данных</Typography>
+                                    </Box>
+                                    : <ContactList contactList={contactList} selectContactHandler={selectContactHandler} />
+                            }
+                      </React.Fragment>
+            }
             {
                 totalPages > 1 &&
                 <Stack spacing={2} alignItems="center">
@@ -120,7 +131,7 @@ const ContactPages = (props) => {
                     closeForm={closeForm}
                 />}
             />
-        </div>
+        </React.Fragment>
     );
 };
 

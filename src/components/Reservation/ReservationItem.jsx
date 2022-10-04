@@ -14,9 +14,15 @@ import WarningIcon from "@mui/icons-material/ErrorOutline";
 const ReservationItem = ({reservation}) => {
     const [open, setOpen] = React.useState(false);
 
+    let backlight = dayjs(reservation.checkin).isSame(dayjs(), 'day')
+        || dayjs(reservation.checkin).isSame(dayjs().add(1, 'day'), 'day')
+
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow
+                style={{backgroundColor: backlight ? "#FFFFCC" : "#FFFFFF"}}
+                sx={{ '& > *': { borderBottom: 'unset' } }}
+            >
                 <TableCell>
                     {
                         reservation.note &&

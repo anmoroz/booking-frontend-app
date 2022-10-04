@@ -24,18 +24,29 @@ const theme = createTheme({
 
 function App() {
     const { authState, logout } = useContext(AuthContext);
-
     const [showProgress, setShowProgress] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState(false);
     const [roomList, setRoomList] = React.useState([]);
+    const [showRoomSelector, setShowRoomSelector] = React.useState(false);
 
     const roomService = RoomService;
+
+    const openRoomSelector = () => {
+        setShowRoomSelector(true);
+    }
+
+    const closeRoomSelector = () => {
+        setShowRoomSelector(false)
+    }
 
     const fetchRooms = async () => {
         setShowProgress(true);
         await roomService.list()
             .then((roomList) => {
                 setRoomList(roomList);
+                if (roomList.length > 0 && !selectedRoom) {
+                    setSelectedRoom(roomList[0]);
+                }
             })
             .catch(() => {
 
@@ -58,8 +69,11 @@ function App() {
                             roomList={roomList}
                             selectedRoom={selectedRoom}
                             setSelectedRoom={setSelectedRoom}
+                            openRoomSelector={openRoomSelector}
+                            closeRoomSelector={closeRoomSelector}
+                            showRoomSelector={showRoomSelector}
                         />
-                        <Navbar logout={logout}/>
+                        <Navbar logout={logout} roomList={roomList}/>
                     </React.Fragment>
                 }
                 { showProgress && <Progress /> }
@@ -69,6 +83,7 @@ function App() {
                         roomList={roomList}
                         setRoomList={setRoomList}
                         selectedRoom={selectedRoom}
+                        openRoomSelector={openRoomSelector}
                     />
                 </Container>
             </BrowserRouter>
