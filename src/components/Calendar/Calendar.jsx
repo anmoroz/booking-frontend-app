@@ -126,7 +126,7 @@ const Calendar = (props) => {
         if (!reservationFormData.isClose) {
             reservation.contact = {
                 name: reservationFormData.name,
-                phone: reservationFormData.phone
+                phone: reservationFormData.phone.replace(/\D/g,'')
             }
             reservation.adults = reservationFormData.adults
             reservation.children = reservationFormData.children
@@ -232,11 +232,11 @@ const Calendar = (props) => {
                 firstDay={1}
                 customButtons={{
                     customPrev: {
-                        text: '<',
+                        icon: 'chevron-left',
                         click: () => {handlePrevMonthClick()}
                     },
                     customNext: {
-                        text: '>',
+                        icon: 'chevron-right',
                         click: () => {handleNextMonthClick()}
                     }
                 }}

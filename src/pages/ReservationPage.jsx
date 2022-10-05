@@ -65,7 +65,8 @@ const ReservationPage = (props) => {
             <Box sx={{ flexGrow: 1 }} m={1} p={1}>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru" >
                     <DesktopDatePicker
-                        label="Прибытие от"
+                        label="От"
+
                         value={filter.from}
                         inputFormat="DD.MM.YYYY"
                         onChange={date => {
@@ -73,10 +74,10 @@ const ReservationPage = (props) => {
                                 {...filter, from: date}
                             )
                         }}
-                        renderInput={(params) => <TextField style={{marginRight: '10px'}} size="small" {...params} />}
+                        renderInput={(params) => <TextField style={{marginRight: '10px', width: '150px'}} size="small" {...params} />}
                     />
                     <DesktopDatePicker
-                        label="Прибытие до"
+                        label="До"
                         value={filter.to}
                         inputFormat="DD.MM.YYYY"
                         onChange={date => {
@@ -84,7 +85,7 @@ const ReservationPage = (props) => {
                                 {...filter, to: date}
                             )
                         }}
-                        renderInput={(params) => <TextField size="small" {...params} />}
+                        renderInput={(params) => <TextField size="small" style={{width: '150px'}} {...params} />}
                     />
                 </LocalizationProvider>
             </Box>

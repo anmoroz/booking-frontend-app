@@ -6,6 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Chip from '@mui/material/Chip';
 import WarningIcon from '@mui/icons-material/ErrorOutline';
+import {formatPhone} from "../../utils/PhoneFormatter";
 
 const ContactItem = ({contact, selectContactHandler, contactViewHandler}) => {
 
@@ -24,7 +25,7 @@ const ContactItem = ({contact, selectContactHandler, contactViewHandler}) => {
             <ListItemText
                 onClick={() => {contactViewHandler(contact)}}
                 sx={{cursor: 'pointer'}}
-                primary={contact.phone}
+                primary={formatPhone(contact.phone)}
                 secondary={
                     <React.Fragment>
                         <Typography

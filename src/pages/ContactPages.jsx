@@ -31,6 +31,7 @@ const ContactPages = (props) => {
 
     const saveContact = async (contact, successCallback, errorCallback) => {
         props.setShowProgress(true);
+        contact.phone = contact.phone.replace(/\D/g,'');
         if (!contact.hasOwnProperty('id')) {
             await contactService.create(contact)
                 .then((createdContact) => {
@@ -91,18 +92,18 @@ const ContactPages = (props) => {
             <Typography variant="h5" component="h4">
                 Контакты
             </Typography>
+            <SearchPanel filter={filter} setFilter={setFilter} />
             {
                 isLoading
                     ? <Box display="flex" justifyContent="center"><CircularProgress /></Box>
                     : <React.Fragment>
-                            <SearchPanel filter={filter} setFilter={setFilter} />
-                            {
-                                !isLoading && contactList.length === 0
-                                    ? <Box display="flex" justifyContent="center" m={1} p={1}>
-                                        <Typography variant="h5" component="h5">Нет данных</Typography>
-                                    </Box>
-                                    : <ContactList contactList={contactList} selectContactHandler={selectContactHandler} />
-                            }
+                        {
+                            !isLoading && contactList.length === 0
+                                ? <Box display="flex" justifyContent="center" m={1} p={1}>
+                                    <Typography variant="h5" component="h5">Нет данных</Typography>
+                                </Box>
+                                : <ContactList contactList={contactList} selectContactHandler={selectContactHandler} />
+                        }
                       </React.Fragment>
             }
             {

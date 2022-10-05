@@ -60,7 +60,7 @@ const RoomPage = (props) => {
         setShowForm(false);
     }
 
-    if (!props.roomList.length) {
+    if (props.isRoomLoading) {
         return <Typography align="center" variant="h6" component="h5">
             Загрузка объектов размещения
         </Typography>

@@ -15,6 +15,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import ConfirmDialog from "../UI/Dialog/ConfirmDialog";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import InputMask from "react-input-mask";
+import DeleteIcon from '@mui/icons-material/DeleteForever'
 
 import './ReservationForm.css';
 
@@ -37,7 +39,10 @@ const ReservationForm = ({
         note: (selectedReservation.hasOwnProperty('note')) ? selectedReservation.note : "",
         checkin: new Date(selectedReservation.checkin),
         checkout: new Date(selectedReservation.checkout),
-        isClose: !selectedReservation.hasOwnProperty('contact') || selectedReservation.contact === null,
+        isClose: (
+            selectedReservation.hasOwnProperty('id')
+            && (!selectedReservation.hasOwnProperty('contact') || selectedReservation.contact === null)
+        ),
         isNewReservation: selectedReservation.hasOwnProperty('isNewReservation')
     });
 
@@ -99,7 +104,6 @@ const ReservationForm = ({
                                 <FormControlLabel
                                     control={
                                         <Switch
-                                            defaultChecked
                                             onChange={
                                                 (e) => {
                                                     setReservation({...reservation, isClose: e.target.checked});
@@ -202,15 +206,22 @@ const ReservationForm = ({
                     <Grid item xs={12}>
                         {
                             !reservation.isClose &&
-                            <TextField
-                                fullWidth
-                                id="phone"
-                                label="Телефон"
-                                variant="outlined"
-                                size="small"
+                            <InputMask
+                                mask="+9 (999) 999-99-99"
                                 value={reservation.phone}
+                                disabled={false}
+                                maskChar=" "
                                 onChange={e => setReservation({...reservation, phone: e.target.value})}
-                            />
+                            >
+                                {() => <TextField
+                                    fullWidth
+                                    id="phone"
+                                    label="Телефон"
+                                    variant="outlined"
+                                    size="small"
+                                />}
+                            </InputMask>
+
                         }
                     </Grid>
                     <Grid item xs={12}>
@@ -236,32 +247,32 @@ const ReservationForm = ({
                 justifyContent="space-between"
                 alignItems="center"
             >
-                <Button
-                    type="submit"
-                    variant="contained"
-                    size="small"
-                    onClick={saveReservationFormHandler}
-                    disabled={blockButtons}
-                >
-                    Сохранить
-                </Button>
                 <div>
-                    {
-                        !reservation.isNewReservation &&
-                        <Button
-                            color="secondary"
-                            type="button"
-                            variant="contained"
-                            size="small"
-                            style={{marginRight: "5px"}}
-                            onClick={() => setShowConfirmDialog(true)}
-                            disabled={blockButtons}
-                        >
-                            {reservation.isClose ? "Открыть бронирование" : "Отменить бронирование"}
-                        </Button>
-                    }
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        size="small"
+                        onClick={saveReservationFormHandler}
+                        disabled={blockButtons}
+                        style={{marginRight: "5px"}}
+                    >
+                        Сохранить
+                    </Button>
                     <Button variant="outlined" size="small" onClick={closeReservationForm}>Отмена</Button>
                 </div>
+                {
+                    !reservation.isNewReservation &&
+                    <Button
+                        color="error"
+                        type="button"
+                        variant="contained"
+                        size="small"
+                        onClick={() => setShowConfirmDialog(true)}
+                        disabled={blockButtons}
+                    >
+                        <DeleteIcon />
+                    </Button>
+                }
             </Box>
             <ConfirmDialog
                 showConfirmDialog={showConfirmDialog}

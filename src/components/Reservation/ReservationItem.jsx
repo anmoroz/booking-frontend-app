@@ -10,6 +10,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import dayjs from "dayjs";
 import Chip from "@mui/material/Chip";
 import WarningIcon from "@mui/icons-material/ErrorOutline";
+import {formatPhone} from "../../utils/PhoneFormatter";
 
 const ReservationItem = ({reservation}) => {
     const [open, setOpen] = React.useState(false);
@@ -39,7 +40,7 @@ const ReservationItem = ({reservation}) => {
                 <TableCell align="left">{dayjs(reservation.checkout).format("DD.MM.YYYY")}</TableCell>
                 <TableCell align="left">{reservation.adults} / {reservation.children}</TableCell>
                 <TableCell align="left">
-                    {reservation.contact.phone}
+                    {formatPhone(reservation.contact.phone)}
                     &nbsp; ({reservation.contact.name})
                     {
                         reservation.contact.isBanned &&

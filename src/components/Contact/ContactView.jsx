@@ -6,6 +6,7 @@ import Chip from "@mui/material/Chip";
 import WarningIcon from "@mui/icons-material/ErrorOutline";
 import Divider from "@mui/material/Divider";
 import Typography from '@mui/material/Typography';
+import {formatPhone} from "../../utils/PhoneFormatter";
 
 const ContactView = ({contact}) => {
 
@@ -21,7 +22,7 @@ const ContactView = ({contact}) => {
                     Телефон:
                 </Grid>
                 <Grid item xs={9}>
-                    {contact.phone}
+                    {formatPhone(contact.phone)}
                 </Grid>
                 <Grid item xs={3} display="flex" justifyContent="flex-end">
                     Имя:

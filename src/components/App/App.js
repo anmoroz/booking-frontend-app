@@ -10,6 +10,7 @@ import TopBar from "../UI/TopBar/TopBar";
 import RoomService from "../../api/RoomService";
 
 import './App.css';
+import {useFetching} from "../../hooks/useFetching";
 
 const theme = createTheme({
     palette: {
@@ -39,7 +40,7 @@ function App() {
         setShowRoomSelector(false)
     }
 
-    const fetchRooms = async () => {
+    const [fetchRooms, isRoomLoading, error] = useFetching(async (page, limit, filter) => {
         setShowProgress(true);
         await roomService.list()
             .then((roomList) => {
@@ -52,7 +53,22 @@ function App() {
 
             });
         setShowProgress(false);
-    }
+    })
+
+    /*const fetchRooms = async () => {
+        setShowProgress(true);
+        await roomService.list()
+            .then((roomList) => {
+                setRoomList(roomList);
+                if (roomList.length > 0 && !selectedRoom) {
+                    setSelectedRoom(roomList[0]);
+                }
+            })
+            .catch(() => {
+
+            });
+        setShowProgress(false);
+    }*/
 
     React.useEffect(() => {
         if (authState.authenticated) {
@@ -84,6 +100,7 @@ function App() {
                         setRoomList={setRoomList}
                         selectedRoom={selectedRoom}
                         openRoomSelector={openRoomSelector}
+                        isRoomLoading={isRoomLoading}
                     />
                 </Container>
             </BrowserRouter>
