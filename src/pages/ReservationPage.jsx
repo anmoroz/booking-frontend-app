@@ -1,7 +1,8 @@
 import React from 'react';
 import ReservationService from "../api/ReservationService";
 import {useFetching} from "../hooks/useFetching";
-import ReservationList from "../components/Reservation/ReservationList";
+import ReservationTableList from "../components/Reservation/ReservationTableList";
+import ReservationCardList from "../components/Reservation/ReservationCardList";
 import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -74,7 +75,7 @@ const ReservationPage = (props) => {
                                 {...filter, from: date}
                             )
                         }}
-                        renderInput={(params) => <TextField style={{marginRight: '10px', width: '150px'}} size="small" {...params} />}
+                        renderInput={(params) => <TextField style={{marginRight: '10px', width: '145px'}} size="small" {...params} />}
                     />
                     <DesktopDatePicker
                         label="До"
@@ -85,11 +86,11 @@ const ReservationPage = (props) => {
                                 {...filter, to: date}
                             )
                         }}
-                        renderInput={(params) => <TextField size="small" style={{width: '150px'}} {...params} />}
+                        renderInput={(params) => <TextField size="small" style={{width: '145px'}} {...params} />}
                     />
                 </LocalizationProvider>
             </Box>
-            <ReservationList reservations={reservations} isLoading={isLoading} />
+            <ReservationCardList reservations={reservations} isLoading={isLoading} />
             {
                 totalPages > 1 &&
                 <Stack spacing={2} alignItems="center" style={{ marginTop: '10px' }}>

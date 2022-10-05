@@ -12,7 +12,7 @@ import Chip from "@mui/material/Chip";
 import WarningIcon from "@mui/icons-material/ErrorOutline";
 import {formatPhone} from "../../utils/PhoneFormatter";
 
-const ReservationItem = ({reservation}) => {
+const ReservationTableItem = ({reservation}) => {
     const [open, setOpen] = React.useState(false);
 
     let backlight = dayjs(reservation.checkin).isSame(dayjs(), 'day')
@@ -77,4 +77,4 @@ const ReservationItem = ({reservation}) => {
     );
 };
 
-export default ReservationItem;
+export default ReservationTableItem;

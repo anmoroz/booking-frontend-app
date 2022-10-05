@@ -6,12 +6,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ReservationItem from "./ReservationItem";
+import ReservationTableItem from "./ReservationTableItem";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircularProgress from '@mui/material/CircularProgress';
 
-const ReservationList = ({reservations, isLoading}) => {
+const ReservationTableList = ({reservations, isLoading}) => {
 
     return (
         <Box sx={{ flexGrow: 1 }} m={1} p={1}>
@@ -44,7 +44,7 @@ const ReservationList = ({reservations, isLoading}) => {
                                 </TableCell>
                             </TableRow>
                             : reservations.map((reservation) => (
-                                <ReservationItem  key={`reservation-${reservation.id}`} reservation={reservation} />
+                                <ReservationTableItem key={`reservation-${reservation.id}`} reservation={reservation} />
                             ))
                         }
                     </TableBody>
@@ -54,4 +54,4 @@ const ReservationList = ({reservations, isLoading}) => {
     );
 };
 
-export default ReservationList;
+export default ReservationTableList;

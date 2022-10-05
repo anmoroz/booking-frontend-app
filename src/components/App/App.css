@@ -1,6 +1,12 @@
 .Container_main {
     margin-top: 18px;
 }
+a {
+    all: unset;
+}
+a:hover {
+    text-decoration:none;
+}
 h1, h2, h3, h4, h5, h6 {
     color: #333;
 }
