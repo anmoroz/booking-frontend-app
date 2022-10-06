@@ -17,7 +17,7 @@ const RoomList = ({rooms, selectRoom}) => {
     return (
         <div>
             <Typography variant="h5" component="h4">
-                Ваши объекты размещения
+                Объекты размещения
             </Typography>
             <List sx={{ width: '100%' }} key="roomList">
                 {rooms.map((room, index) =>

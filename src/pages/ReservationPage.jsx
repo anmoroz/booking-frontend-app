@@ -1,7 +1,6 @@
 import React from 'react';
 import ReservationService from "../api/ReservationService";
 import {useFetching} from "../hooks/useFetching";
-import ReservationTableList from "../components/Reservation/ReservationTableList";
 import ReservationCardList from "../components/Reservation/ReservationCardList";
 import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
@@ -12,6 +11,7 @@ import {DesktopDatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {TextField} from "@mui/material";
 import Box from '@mui/material/Box';
 import dayjs from "dayjs";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ReservationPage = (props) => {
     let defaultFilter = {
@@ -27,7 +27,6 @@ const ReservationPage = (props) => {
     const [totalPages, setTotalPages] = React.useState(0);
     const [limit, setLimit] = React.useState(10);
     const [page, setPage] = React.useState(1);
-    const [contactKeyword, setContactKeyword] = React.useState();
 
     const [fetchReservationList, isLoading, error] = useFetching(async (page, limit, filter) => {
         setReservations([]);
@@ -50,12 +49,6 @@ const ReservationPage = (props) => {
     React.useEffect(() => {
         fetchReservationList(page, limit, filter);
     }, [page, limit, filter])
-
-    const onChangeContactName = (event, option) => {
-        if (option) {
-            setContactKeyword(option.keyword);
-        }
-    }
 
     return (
         <div>
@@ -90,7 +83,20 @@ const ReservationPage = (props) => {
                     />
                 </LocalizationProvider>
             </Box>
-            <ReservationCardList reservations={reservations} isLoading={isLoading} />
+            {
+                isLoading
+                    ? <Box display="flex" justifyContent="center"><CircularProgress /></Box>
+                    : <React.Fragment>
+                        {
+                            !isLoading && reservations.length === 0
+                                ? <Box display="flex" justifyContent="center" m={1} p={1}>
+                                    <Typography variant="h5" component="h5">Нет данных</Typography>
+                                </Box>
+                                :
+                                <ReservationCardList reservations={reservations} isLoading={isLoading} />
+                        }
+                    </React.Fragment>
+            }
             {
                 totalPages > 1 &&
                 <Stack spacing={2} alignItems="center" style={{ marginTop: '10px' }}>

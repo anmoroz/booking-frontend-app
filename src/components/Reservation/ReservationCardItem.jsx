@@ -13,6 +13,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Tooltip from '@mui/material/Tooltip';
+import Divider from "@mui/material/Divider";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -37,10 +38,10 @@ const ReservationCardItem = ({reservation}) => {
 
     return (
         <Card
-            style={{backgroundColor: backlight ? "#FFFFCC" : "#FFFFFF"}}
-            sx={{ minWidth: 275, marginTop: '10px' }}
+            style={{backgroundColor: backlight ? "#FFFFCC" : "#EBFEFF"}}
+            sx={{ minWidth: 275, marginTop: '16px' }}
         >
-            <CardContent>
+            <CardContent sx={{paddingTop: '10px', paddingBottom: '6px'}} >
                 <Typography sx={{ fontSize: 16 }} component="div" gutterBottom>
                     {formatPhone(reservation.contact.phone)} &nbsp; ({reservation.contact.name})
                 </Typography>
@@ -51,7 +52,7 @@ const ReservationCardItem = ({reservation}) => {
                     Выезд: {dayjs(reservation.checkout).format("DD.MM.YYYY")}
                 </Typography>
             </CardContent>
-
+            <Divider />
             <CardActions disableSpacing>
                 <Tooltip title="Позвонить">
                     <IconButton aria-label="Позвонить" href={`tel:+${reservation.contact.phone}`}>
@@ -78,7 +79,6 @@ const ReservationCardItem = ({reservation}) => {
                     <ExpandMoreIcon />
                 </ExpandMore>
             </CardActions>
-
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
