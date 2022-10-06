@@ -15,7 +15,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import ConfirmDialog from "../UI/Dialog/ConfirmDialog";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import InputMask from "react-input-mask";
 import DeleteIcon from '@mui/icons-material/DeleteForever'
 
 import './ReservationForm.css';
@@ -77,6 +76,19 @@ const ReservationForm = ({
                 setBlockButtons(false);
             }
         )
+    }
+
+    const onChangePhone = (e) => {
+        let phone = e.target.value;
+
+        if (phone.match(/^[1-6,8,9,0]$/)) {
+            phone = `+7 ${phone}`;
+        } else if (phone.match(/^7$/)) {
+            phone = `+${phone} `;
+        } else if (phone.match(/^\+7$/)) {
+            phone = `${phone} `;
+        }
+        setReservation({...reservation, phone: phone});
     }
 
     return (
@@ -194,7 +206,6 @@ const ReservationForm = ({
                             !reservation.isClose &&
                             <TextField
                                 fullWidth
-                                id="name"
                                 label="Имя"
                                 variant="outlined"
                                 size="small"
@@ -206,22 +217,14 @@ const ReservationForm = ({
                     <Grid item xs={12}>
                         {
                             !reservation.isClose &&
-                            <InputMask
-                                mask="+9 (999) 999-99-99"
+                            <TextField
+                                fullWidth
+                                label="Телефон"
+                                variant="outlined"
+                                size="small"
                                 value={reservation.phone}
-                                disabled={false}
-                                maskChar=" "
-                                onChange={e => setReservation({...reservation, phone: e.target.value})}
-                            >
-                                {() => <TextField
-                                    fullWidth
-                                    id="phone"
-                                    label="Телефон"
-                                    variant="outlined"
-                                    size="small"
-                                />}
-                            </InputMask>
-
+                                onChange={onChangePhone}
+                            />
                         }
                     </Grid>
                     <Grid item xs={12}>
