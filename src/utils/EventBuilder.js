@@ -12,7 +12,7 @@ export const buildEvent = (reservationItem) => {
         title: title,
         start: reservationItem.checkin,
         end: reservationItem.checkout,
-        backgroundColor: contact !== null ? '#66CC00' : '#CCC',
-        borderColor: contact !== null ? '#66CC00' : '#CCC',
+        backgroundColor: contact !== null ? '#66CC00' : '#CCCCCC',
+        borderColor: contact !== null ? '#66CC00' : '#CCCCCC',
     }
 }

@@ -38,6 +38,7 @@ const ReservationForm = ({
         note: (selectedReservation.hasOwnProperty('note')) ? selectedReservation.note : "",
         checkin: new Date(selectedReservation.checkin),
         checkout: new Date(selectedReservation.checkout),
+        price: selectedReservation.price,
         isClose: (
             selectedReservation.hasOwnProperty('id')
             && (!selectedReservation.hasOwnProperty('contact') || selectedReservation.contact === null)
@@ -157,76 +158,79 @@ const ReservationForm = ({
                                     )
                                 }}
                                 renderInput={(params) => <TextField fullWidth size="small" {...params} />}
-
                             />
                         </LocalizationProvider>
                     </Grid>
                     {
                         (!reservation.isClose) &&
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                id="adults"
-                                select
-                                label="Взрослых"
-                                variant="outlined"
-                                size="small"
-                                defaultValue={reservation.adults}
-                                onChange={e => setReservation({...reservation, adults: e.target.value})}
-                            >
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
-                                <MenuItem value={3}>3</MenuItem>
-                                <MenuItem value={4}>4</MenuItem>
-                            </TextField>
-                        </Grid>
-                    }
-                    {
-                        !reservation.isClose &&
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                id="children"
-                                select
-                                label="Детей"
-                                variant="outlined"
-                                size="small"
-                                defaultValue={reservation.children}
-                                onChange={e => setReservation({...reservation, children: e.target.value})}
-                            >
-                                <MenuItem value={0}>0</MenuItem>
-                                <MenuItem value={1}>1</MenuItem>
-                                <MenuItem value={2}>2</MenuItem>
-                            </TextField>
-                        </Grid>
+                        <React.Fragment>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Цена"
+                                    variant="outlined"
+                                    size="small"
+                                    type="number"
+                                    value={reservation.price}
+                                    onChange={e => setReservation({...reservation, price: e.target.value})}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    id="adults"
+                                    select
+                                    label="Взрослых"
+                                    variant="outlined"
+                                    size="small"
+                                    defaultValue={reservation.adults}
+                                    onChange={e => setReservation({...reservation, adults: e.target.value})}
+                                >
+                                    <MenuItem value={1}>1</MenuItem>
+                                    <MenuItem value={2}>2</MenuItem>
+                                    <MenuItem value={3}>3</MenuItem>
+                                    <MenuItem value={4}>4</MenuItem>
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    id="children"
+                                    select
+                                    label="Детей"
+                                    variant="outlined"
+                                    size="small"
+                                    defaultValue={reservation.children}
+                                    onChange={e => setReservation({...reservation, children: e.target.value})}
+                                >
+                                    <MenuItem value={0}>0</MenuItem>
+                                    <MenuItem value={1}>1</MenuItem>
+                                    <MenuItem value={2}>2</MenuItem>
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Имя"
+                                    variant="outlined"
+                                    size="small"
+                                    value={reservation.name}
+                                    onChange={e => setReservation({...reservation, name: e.target.value})}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Телефон"
+                                    variant="outlined"
+                                    size="small"
+                                    value={reservation.phone}
+                                    onChange={onChangePhone}
+                                />
+                            </Grid>
+                        </React.Fragment>
                     }
 
-                    <Grid item xs={12}>
-                        {
-                            !reservation.isClose &&
-                            <TextField
-                                fullWidth
-                                label="Имя"
-                                variant="outlined"
-                                size="small"
-                                value={reservation.name}
-                                onChange={e => setReservation({...reservation, name: e.target.value})}
-                            />
-                        }
-                    </Grid>
-                    <Grid item xs={12}>
-                        {
-                            !reservation.isClose &&
-                            <TextField
-                                fullWidth
-                                label="Телефон"
-                                variant="outlined"
-                                size="small"
-                                value={reservation.phone}
-                                onChange={onChangePhone}
-                            />
-                        }
-                    </Grid>
                     <Grid item xs={12}>
                         <TextField
                             id="note"

@@ -16,6 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import {formatPrice} from "../../utils/PriceFormatter";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -88,7 +89,7 @@ const ContactItem = ({contact, selectContactHandler}) => {
                     }
                     {
                         contact.lastReservation &&
-                        <Grid container spacing={2} sx={{ fontSize: 14 }}>
+                        <Grid container spacing={1} sx={{ fontSize: 14 }}>
                             <Grid item xs={12}>
                                 <Typography variant="h6" component="h6">Последняя бронь</Typography>
                             </Grid>
@@ -122,6 +123,17 @@ const ContactItem = ({contact, selectContactHandler}) => {
                             <Grid item xs={9}>
                                 {contact.lastReservation.children}
                             </Grid>
+                            {
+                                contact.lastReservation.price &&
+                                <React.Fragment>
+                                    <Grid item xs={3} display="flex" justifyContent="flex-end">
+                                        Цена:
+                                    </Grid>
+                                    <Grid item xs={9}>
+                                        {formatPrice(contact.lastReservation.price)}
+                                    </Grid>
+                                </React.Fragment>
+                            }
                             <Grid item xs={3}></Grid>
                             <Grid item xs={9} className="view_note">
                                 {contact.lastReservation.note}

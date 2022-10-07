@@ -7,6 +7,9 @@ import {buildEvent} from "../../utils/EventBuilder";
 import ReservationForm from "../Reservation/ReservationForm";
 import ModalWindow from "../UI/Modal/ModalWindow";
 import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import dayjs from "dayjs";
 
 import './Calendar.css'
@@ -116,6 +119,7 @@ const Calendar = (props) => {
             note: "",
             checkin: undefined,
             checkout: undefined,
+            price: undefined,
             contact: undefined,
         }
         if (!reservationFormData.isNewReservation) {
@@ -130,6 +134,7 @@ const Calendar = (props) => {
             }
             reservation.adults = reservationFormData.adults
             reservation.children = reservationFormData.children
+            reservation.price = parseFloat(reservationFormData.price)
         }
 
         reservation.checkin = reservationFormData.checkin.toISOString().split('T')[0]
@@ -252,6 +257,14 @@ const Calendar = (props) => {
                 nextDayThreshold='12:00:00'
                 events={events}
             />
+            <Alert severity="info" style={{marginTop: '16px'}}>
+                <AlertTitle>Информация</AlertTitle>
+                <Stack direction="row" spacing={1}>
+                    <Chip label="Забронированно" className="Calendar-info_reservation" />
+                    <Chip label="Бронь закрта" className="Calendar-info_reservation_close" />
+                    <Chip label="Доступно для бронирования" className="Calendar-info_reservation_free" />
+                </Stack>
+            </Alert>
             <ModalWindow
                 open={showForm}
                 handleClose={closeReservationForm}

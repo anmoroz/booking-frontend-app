@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from "@mui/material/Divider";
+import {formatPrice} from "../../utils/PriceFormatter";
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -42,15 +43,21 @@ const ReservationCardItem = ({reservation}) => {
             sx={{ minWidth: 275, marginTop: '16px' }}
         >
             <CardContent sx={{paddingTop: '10px', paddingBottom: '6px'}} >
-                <Typography sx={{ fontSize: 16 }} component="div" gutterBottom>
+                <Typography sx={{ fontSize: 16 }} component="div">
                     {formatPhone(reservation.contact.phone)} &nbsp; ({reservation.contact.name})
                 </Typography>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Прибытие: {dayjs(reservation.checkin).format("DD.MM.YYYY")}
+                <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                    Прибытие: <strong>{dayjs(reservation.checkin).format("DD.MM.YYYY")}</strong>
                 </Typography>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                    Выезд: {dayjs(reservation.checkout).format("DD.MM.YYYY")}
+                    Выезд: <strong>{dayjs(reservation.checkout).format("DD.MM.YYYY")}</strong>
                 </Typography>
+                {
+                    reservation.price &&
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                        Цена: <strong>{formatPrice(reservation.price)}</strong>
+                    </Typography>
+                }
             </CardContent>
             <Divider />
             <CardActions disableSpacing>

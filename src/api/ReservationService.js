@@ -50,8 +50,6 @@ const ReservationService = (function(){
             }
         })
 
-
-
         let response = await axios.get(
             `/reservations`,
             {params: params}

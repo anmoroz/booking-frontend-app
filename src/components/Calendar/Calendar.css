@@ -11,3 +11,15 @@
 .fc-button {
     background-color: #008696 !important;
 }
+.Calendar-info_reservation {
+    background-color: #66CC00 !important;
+    border-color: #66CC00 !important;
+}
+.Calendar-info_reservation_close {
+    background-color: #CCCCCC !important;
+    border-color: #CCCCCC !important;
+}
+.Calendar-info_reservation_free {
+    background-color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+}
