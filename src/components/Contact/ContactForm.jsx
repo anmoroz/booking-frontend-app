@@ -8,7 +8,6 @@ import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import ErrorAlert from "../UI/Alert/ErrorAlert";
 import Typography from "@mui/material/Typography";
-import InputMask from "react-input-mask";
 
 const ContactForm = ({editedContact, save, closeForm}) => {
     const [errorMessage, setErrorMessage] = React.useState(false);
@@ -32,6 +31,19 @@ const ContactForm = ({editedContact, save, closeForm}) => {
         );
     }
 
+    const onChangePhone = (e) => {
+        let phone = e.target.value;
+
+        if (phone.match(/^[1-6,8,9,0]$/)) {
+            phone = `+7 ${phone}`;
+        } else if (phone.match(/^7$/)) {
+            phone = `+${phone} `;
+        } else if (phone.match(/^\+7$/)) {
+            phone = `${phone} `;
+        }
+        setContact({...contact, phone: phone});
+    }
+
     return (
         <div>
             <Box sx={{ flexGrow: 1 }} m={1} p={1}>
@@ -43,20 +55,14 @@ const ContactForm = ({editedContact, save, closeForm}) => {
             <Box sx={{ flexGrow: 1 }} m={1} p={1}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <InputMask
-                            mask="+9 (999) 999-99-99"
-                            disabled={false}
-                            maskChar=" "
+                        <TextField
+                            fullWidth
+                            label="Телефон"
+                            variant="outlined"
+                            size="small"
                             value={contact.phone}
-                            onChange={e => setContact({...contact, phone: e.target.value})}
-                        >
-                            {() => <TextField
-                                fullWidth
-                                label="Телефон"
-                                variant="outlined"
-                                size="small"
-                            />}
-                        </InputMask>
+                            onChange={onChangePhone}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
