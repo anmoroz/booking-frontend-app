@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useNavigate } from "react-router-dom";
 
 
@@ -109,6 +110,9 @@ const Navbar = ({logout, roomList}) => {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
+                        <Button key="help" color="inherit" onClick={() => {navigate("help")}}>
+                            <HelpOutlineIcon />
+                        </Button>
                         <Button key="logout" color="inherit" onClick={logout}>
                             <LogoutIcon />
                         </Button>
