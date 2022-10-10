@@ -1,5 +1,6 @@
 .LoginPage-form {
     position: absolute;
+    margin-top: 60px;
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
