@@ -55,21 +55,6 @@ function App() {
         setShowProgress(false);
     })
 
-    /*const fetchRooms = async () => {
-        setShowProgress(true);
-        await roomService.list()
-            .then((roomList) => {
-                setRoomList(roomList);
-                if (roomList.length > 0 && !selectedRoom) {
-                    setSelectedRoom(roomList[0]);
-                }
-            })
-            .catch(() => {
-
-            });
-        setShowProgress(false);
-    }*/
-
     React.useEffect(() => {
         if (authState.authenticated) {
             fetchRooms();

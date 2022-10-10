@@ -7,9 +7,17 @@ import RoomPage from "../../pages/RoomPage";
 import ReservationPage from "../../pages/ReservationPage";
 import ContactPages from "../../pages/ContactPages";
 import HelpPage from "../../pages/HelpPage";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const AppRouter = (props) => {
     const { authState } = useContext(AuthContext);
+
+    if (props.isRoomLoading) {
+        return (
+            <Box  m={1} p={1} display="flex" justifyContent="center"><CircularProgress /></Box>
+        );
+    }
 
     return (
         authState.authenticated
@@ -19,7 +27,7 @@ const AppRouter = (props) => {
                     <Route path="/reservation" element={ <ReservationPage {...props} /> } />
                     <Route path="/calendar" element={ <CalendarPage {...props} /> } />
                     <Route path="/help" element={ <HelpPage {...props} /> } />
-                    <Route path="*" element={<Navigate to="/room" replace />}/>
+                    <Route path="*" element={<Navigate to="/calendar" replace />}/>
                 </Routes>
             : <Login/>
     );
