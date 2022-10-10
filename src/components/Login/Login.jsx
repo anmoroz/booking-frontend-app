@@ -26,14 +26,11 @@ const Login = () => {
         setErrMsg('');
     }, [email, password])
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         setLoginInProgress(true);
 
         let errorCallback = (error) => {
             setLoginInProgress(false);
-            setEmail('');
-            setPassword('');
             if (!error.response) {
                 setErrMsg('No Server Response');
             } else if (error.response.status === 400) {
@@ -44,6 +41,7 @@ const Login = () => {
                 setErrMsg('Login Failed');
             }
         }
+
         let successCallback = () => {
             setLoginInProgress(false);
         }
@@ -51,9 +49,14 @@ const Login = () => {
         await login(email, password, successCallback, errorCallback);
     }
 
+    const handleKeydown = e => {
+        if (e.keyCode === 13) {
+            handleLogin()
+        }
+    };
+
     return (
         <Box
-            component="form"
             noValidate
             autoComplete="off"
             className="LoginPage-form"
@@ -69,7 +72,7 @@ const Login = () => {
             {
                 errMsg &&
                 <Box m={1} p={1}>
-                    <Alert severity="error">{errMsg}</Alert>
+                    <Alert severity="error" style={{whiteSpace: "pre-wrap"}}>{errMsg}</Alert>
                 </Box>
             }
             <Box m={1} p={1}>
@@ -90,6 +93,7 @@ const Login = () => {
                     variant="standard"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={handleKeydown}
                 />
             </Box>
             <Box m={1} p={1}>
