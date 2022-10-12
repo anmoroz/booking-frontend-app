@@ -22,7 +22,8 @@ const Navbar = ({logout, roomList}) => {
         {title: 'Объекты размещения', url: 'room'},
         {title: 'Контакты', url: 'contact'},
         {title: 'Бронирования', url: 'reservation'},
-        {title: 'Календарь', url: 'calendar'}
+        {title: 'Календарь', url: 'calendar'},
+        {title: 'Статистика', url: 'stat'}
     ];
     if (roomList.length === 0) {
         pages = [
@@ -34,6 +35,7 @@ const Navbar = ({logout, roomList}) => {
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
