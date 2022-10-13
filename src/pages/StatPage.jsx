@@ -20,11 +20,13 @@ const StatPage = (props) => {
     const [fetchStat, isLoading, error] = useFetching(async (room) => {
         const response = await statService.reservations(room);
 
+        setChartData([]);
         response.items.forEach((item) => {
             addChartData({
                 label: item.month,
                 value: item.days,
-                toolText: `${item.amount} ₽`
+                toolText: `${item.days} дней{br}${item.amount} ₽`,
+                color: "#e29117"
             })
         })
     })
@@ -37,7 +39,7 @@ const StatPage = (props) => {
         if (props.selectedRoom) {
             fetchStat(props.selectedRoom);
         }
-    }, [props.isRoomLoading])
+    }, [props.selectedRoom])
 
     const chartConfigs = {
         type: "column2d",
