@@ -12,6 +12,11 @@ import {TextField} from "@mui/material";
 import Box from '@mui/material/Box';
 import dayjs from "dayjs";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from '@mui/material/IconButton';
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import Tooltip from '@mui/material/Tooltip';
+import fileSaver from 'file-saver';
+
 
 const ReservationPage = (props) => {
     let defaultFilter = {
@@ -40,6 +45,16 @@ const ReservationPage = (props) => {
         setPage(page);
     };
 
+    const handleExport = async () => {
+        await reservationService.download(filter)
+            .then((response) => {
+                let blob = new Blob([response.data], {
+                    type: response.headers['content-type']
+                });
+                fileSaver.saveAs(blob, 'reservations-export.xlsx')
+            });
+    };
+
     React.useEffect(() => {
         if (props.selectedRoom) {
             setFilter({...filter, roomId: props.selectedRoom.id})
@@ -56,7 +71,15 @@ const ReservationPage = (props) => {
                 Бронирования
             </Typography>
             <SearchPanel filter={filter} setFilter={setFilter} placeholder="Поиск по телефону и имени" />
-            <Box sx={{ flexGrow: 1 }} m={1} p={1}>
+            <Box
+                component="span"
+                m={1}
+                p={1}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+            >
+                <div>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru" >
                     <DesktopDatePicker
                         label="От"
@@ -68,7 +91,7 @@ const ReservationPage = (props) => {
                                 {...filter, from: date}
                             )
                         }}
-                        renderInput={(params) => <TextField style={{marginRight: '10px', width: '145px'}} size="small" {...params} />}
+                        renderInput={(params) => <TextField style={{marginTop: '6px', marginRight: '10px', width: '145px'}} size="small" {...params} />}
                     />
                     <DesktopDatePicker
                         label="До"
@@ -79,9 +102,16 @@ const ReservationPage = (props) => {
                                 {...filter, to: date}
                             )
                         }}
-                        renderInput={(params) => <TextField size="small" style={{width: '145px'}} {...params} />}
+                        renderInput={(params) => <TextField size="small" style={{marginTop: '6px', width: '145px'}} {...params} />}
                     />
                 </LocalizationProvider>
+                </div>
+                <Tooltip title="Экспорт в XLSX">
+                    <IconButton onClick={handleExport}>
+                        <FileDownloadIcon />
+                    </IconButton>
+                </Tooltip>
+
             </Box>
             {
                 isLoading
