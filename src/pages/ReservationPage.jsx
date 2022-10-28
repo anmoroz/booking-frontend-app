@@ -80,38 +80,37 @@ const ReservationPage = (props) => {
                 alignItems="center"
             >
                 <div>
-                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru" >
-                    <DesktopDatePicker
-                        label="От"
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru" >
+                        <DesktopDatePicker
+                            label="От"
 
-                        value={filter.from}
-                        inputFormat="DD.MM.YYYY"
-                        onChange={date => {
-                            setFilter(
-                                {...filter, from: date}
-                            )
-                        }}
-                        renderInput={(params) => <TextField style={{marginTop: '6px', marginRight: '10px', width: '145px'}} size="small" {...params} />}
-                    />
-                    <DesktopDatePicker
-                        label="До"
-                        value={filter.to}
-                        inputFormat="DD.MM.YYYY"
-                        onChange={date => {
-                            setFilter(
-                                {...filter, to: date}
-                            )
-                        }}
-                        renderInput={(params) => <TextField size="small" style={{marginTop: '6px', width: '145px'}} {...params} />}
-                    />
-                </LocalizationProvider>
+                            value={filter.from}
+                            inputFormat="DD.MM.YYYY"
+                            onChange={date => {
+                                setFilter(
+                                    {...filter, from: date}
+                                )
+                            }}
+                            renderInput={(params) => <TextField style={{marginTop: '6px', marginRight: '10px', width: '145px'}} size="small" {...params} />}
+                        />
+                        <DesktopDatePicker
+                            label="До"
+                            value={filter.to}
+                            inputFormat="DD.MM.YYYY"
+                            onChange={date => {
+                                setFilter(
+                                    {...filter, to: date}
+                                )
+                            }}
+                            renderInput={(params) => <TextField size="small" style={{marginTop: '6px', width: '145px'}} {...params} />}
+                        />
+                    </LocalizationProvider>
                 </div>
                 <Tooltip title="Экспорт в XLSX">
                     <IconButton onClick={handleExport}>
                         <FileDownloadIcon />
                     </IconButton>
                 </Tooltip>
-
             </Box>
             {
                 isLoading

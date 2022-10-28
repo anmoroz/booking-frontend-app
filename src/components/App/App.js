@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import {BrowserRouter} from "react-router-dom";
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AppContextProvider } from '../../context/AppContext'
 import AppRouter from "./AppRouter";
 import Navbar from "../UI/Navbar/Navbar";
 import {AuthContext} from "../../context/AuthProvider";
@@ -29,6 +30,7 @@ function App() {
     const [selectedRoom, setSelectedRoom] = useState(false);
     const [roomList, setRoomList] = React.useState([]);
     const [showRoomSelector, setShowRoomSelector] = React.useState(false);
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
 
     const roomService = RoomService;
 
@@ -61,34 +63,52 @@ function App() {
         }
     }, [authState])
 
+    React.useEffect(() => {
+        // Update network status
+        const handleStatusChange = () => {
+            setIsOnline(navigator.onLine);
+        };
+
+        window.addEventListener('online', handleStatusChange);
+        window.addEventListener('offline', handleStatusChange);
+
+        return () => {
+            window.removeEventListener('online', handleStatusChange);
+            window.removeEventListener('offline', handleStatusChange);
+        };
+    }, [isOnline]);
+
     return (
         <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                { authState.authenticated &&
-                    <React.Fragment>
-                        <TopBar
+            <AppContextProvider>
+                <BrowserRouter>
+                    { authState.authenticated &&
+                        <React.Fragment>
+                            <TopBar
+                                roomList={roomList}
+                                selectedRoom={selectedRoom}
+                                setSelectedRoom={setSelectedRoom}
+                                openRoomSelector={openRoomSelector}
+                                closeRoomSelector={closeRoomSelector}
+                                showRoomSelector={showRoomSelector}
+                                isOnline={isOnline}
+                            />
+                            <Navbar logout={logout} roomList={roomList}/>
+                        </React.Fragment>
+                    }
+                    { showProgress && <Progress /> }
+                    <Container fixed className="Container_main">
+                        <AppRouter
+                            setShowProgress={setShowProgress}
                             roomList={roomList}
+                            setRoomList={setRoomList}
                             selectedRoom={selectedRoom}
-                            setSelectedRoom={setSelectedRoom}
                             openRoomSelector={openRoomSelector}
-                            closeRoomSelector={closeRoomSelector}
-                            showRoomSelector={showRoomSelector}
+                            isRoomLoading={isRoomLoading}
                         />
-                        <Navbar logout={logout} roomList={roomList}/>
-                    </React.Fragment>
-                }
-                { showProgress && <Progress /> }
-                <Container fixed className="Container_main">
-                    <AppRouter
-                        setShowProgress={setShowProgress}
-                        roomList={roomList}
-                        setRoomList={setRoomList}
-                        selectedRoom={selectedRoom}
-                        openRoomSelector={openRoomSelector}
-                        isRoomLoading={isRoomLoading}
-                    />
-                </Container>
-            </BrowserRouter>
+                    </Container>
+                </BrowserRouter>
+            </AppContextProvider>
         </ThemeProvider>
     );
 }

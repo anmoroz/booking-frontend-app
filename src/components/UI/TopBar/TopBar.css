@@ -3,7 +3,7 @@
     height: 36px;
 }
 .TopBar_main_wrapper {
-    padding-right: 29px;
+    padding-right: 44px;
     padding-left: 29px;
     padding-top: 8px;
     color: aliceblue;
@@ -17,4 +17,9 @@
 }
 .TopBar_icon_warning {
     color: yellow;
+}
+.TopBar_no_connection {
+    color: yellow;
+    padding-bottom: 6px;
+    font-weight: bold;
 }

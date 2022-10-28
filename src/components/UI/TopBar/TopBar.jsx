@@ -1,13 +1,17 @@
 import React from 'react';
+import { AppContext } from '../../../context/AppContext'
 import Box from "@mui/material/Box";
 import ModalWindow from "../Modal/ModalWindow";
 import RoomSelectorForm from "./RoomSelectorForm";
 import HouseIcon from '@mui/icons-material/House';
 import WarningIcon from '@mui/icons-material/WarningAmber';
+import SignalWifiConnectedNoInternet4Icon from '@mui/icons-material/SignalWifiConnectedNoInternet4';
 
 import "./TopBar.css";
 
 const TopBar = (props) => {
+    const { media } = React.useContext(AppContext)
+
     const onChangeRoomSelector = (event, option) => {
         if (option) {
             props.setSelectedRoom(option.room);
@@ -28,7 +32,13 @@ const TopBar = (props) => {
                 }}
                 onClick={props.openRoomSelector}
             >
-                <div className="TopBar_main_wrapper">
+                <Box
+                    className="TopBar_main_wrapper"
+                    component="span"
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
                     {
                         props.selectedRoom
                         ? <div>
@@ -40,8 +50,17 @@ const TopBar = (props) => {
                                 Выберете объект размещения
                           </div>
                     }
-                </div>
-
+                    {
+                        !props.isOnline &&
+                        <div className="TopBar_no_connection">
+                            {
+                                media === 'mobile'
+                                ? <SignalWifiConnectedNoInternet4Icon />
+                                : "Нет подключения к серверу"
+                            }
+                        </div>
+                    }
+                </Box>
             </Box>
             <ModalWindow
                 open={props.showRoomSelector}
