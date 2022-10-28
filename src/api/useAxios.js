@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from "axios";
 import LocalStorageService from "../service/LocalStorageService";
 
@@ -19,6 +20,17 @@ const useAxios = () => {
         }
 
         return req
+    })
+
+    axiosInstance.interceptors.response.use((response) => {
+        return response;
+    }, (error) => {
+        if (error.response.status === 401) {
+            localStorageService.clearToken();
+            window.location.reload();
+        }
+
+        return Promise.reject(error);
     })
 
     return axiosInstance;

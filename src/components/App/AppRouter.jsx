@@ -16,22 +16,24 @@ const AppRouter = (props) => {
 
     if (props.isRoomLoading) {
         return (
-            <Box  m={1} p={1} display="flex" justifyContent="center"><CircularProgress /></Box>
+            <Box m={1} p={1} display="flex" justifyContent="center"><CircularProgress /></Box>
         );
     }
 
     return (
-        authState.authenticated
-            ? <Routes>
-                    <Route path="/room" element={ <RoomPage {...props} /> } />
-                    <Route path="/contact" element={ <ContactPages {...props} /> } />
-                    <Route path="/reservation" element={ <ReservationPage {...props} /> } />
-                    <Route path="/calendar" element={ <CalendarPage {...props} /> } />
-                    <Route path="/stat" element={ <StatPage {...props} /> } />
-                    <Route path="/help" element={ <HelpPage {...props} /> } />
-                    <Route path="*" element={<Navigate to="/calendar" replace />}/>
-                </Routes>
-            : <Login/>
+        authState.authenticated ? (
+            <Routes>
+                <Route path="/room" element={ <RoomPage {...props} /> } />
+                <Route path="/contact" element={ <ContactPages {...props} /> } />
+                <Route path="/reservation" element={ <ReservationPage {...props} /> } />
+                <Route path="/calendar" element={ <CalendarPage {...props} /> } />
+                <Route path="/stat" element={ <StatPage {...props} /> } />
+                <Route path="/help" element={ <HelpPage {...props} /> } />
+                <Route path="*" element={<Navigate to="/calendar" replace />}/>
+            </Routes>
+        ) : (
+            <Login/>
+        )
     );
 };
 

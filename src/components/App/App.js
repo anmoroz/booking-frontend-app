@@ -64,7 +64,6 @@ function App() {
     }, [authState])
 
     React.useEffect(() => {
-        // Update network status
         const handleStatusChange = () => {
             setIsOnline(navigator.onLine);
         };

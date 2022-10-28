@@ -1,21 +1,21 @@
-import React, {createContext, useEffect, useState} from 'react'
+import React from 'react'
 import useAxios from '../api/useAxios'
 import LocalStorageService from "../service/LocalStorageService";
 
-export const AuthContext = createContext(null);
+export const AuthContext = React.createContext(null);
 
 const localStorageService = LocalStorageService.getService();
 
 export const AuthProvider = ({ children }) => {
     const api = useAxios()
 
-    const [authState, setAuthState] = useState({
+    const [authState, setAuthState] = React.useState({
         accessToken: localStorageService.getAccessToken(),
         refreshToken: localStorageService.getRefreshToken(),
         authenticated: localStorageService.getAccessToken() !== null
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (authState.authenticated) {
             localStorageService.setToken({
                 accessToken: authState.accessToken,
@@ -25,10 +25,6 @@ export const AuthProvider = ({ children }) => {
             localStorageService.clearToken();
         }
     }, [authState])
-
-    /*const getAccessToken = () => {
-        return authState.accessToken;
-    };*/
 
     const logout = () => {
         setAuthState({
