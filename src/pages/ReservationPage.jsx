@@ -10,7 +10,6 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DesktopDatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {TextField} from "@mui/material";
 import Box from '@mui/material/Box';
-import dayjs from "dayjs";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from '@mui/material/IconButton';
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -23,17 +22,20 @@ const ReservationPage = (props) => {
         sort: '',
         keyword: '',
         roomId: null,
-        from: dayjs(),
-        to: dayjs().add(7, 'day')
+        from: null,
+        to: null
     }
     const reservationService = ReservationService;
     const [reservations, setReservations] = React.useState([]);
     const [filter, setFilter] = React.useState(defaultFilter);
     const [totalPages, setTotalPages] = React.useState(0);
-    const [limit, setLimit] = React.useState(10);
+    const [limit, setLimit] = React.useState(50);
     const [page, setPage] = React.useState(1);
 
     const [fetchReservationList, isLoading, error] = useFetching(async (page, limit, filter) => {
+        if (!filter.roomId) {
+            return;
+        }
         setReservations([]);
         let response = await reservationService.list(page, limit, filter);
         setReservations(response.items);
@@ -83,7 +85,6 @@ const ReservationPage = (props) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru" >
                         <DesktopDatePicker
                             label="От"
-
                             value={filter.from}
                             inputFormat="DD.MM.YYYY"
                             onChange={date => {

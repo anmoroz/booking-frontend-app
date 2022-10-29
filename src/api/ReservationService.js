@@ -43,7 +43,7 @@ const ReservationService = (function(){
         paramList.forEach((paramName) => {
             if (criteria.hasOwnProperty(paramName)) {
                 let val = criteria[paramName];
-                if (paramName === 'from' || paramName === 'to') {
+                if ((paramName === 'from' || paramName === 'to') && criteria[paramName]) {
                     val = criteria[paramName].format("YYYY-MM-DD")
                 }
                 params[`criteria[${paramName}]`] = val;

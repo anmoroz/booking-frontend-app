@@ -19,7 +19,7 @@ const ContactPages = (props) => {
     const [editedContact, setEditedContact] = React.useState(null);
     const [filter, setFilter] = React.useState({sort: '', keyword: ''});
     const [totalPages, setTotalPages] = React.useState(0);
-    const [limit, setLimit] = React.useState(10);
+    const [limit, setLimit] = React.useState(50);
     const [page, setPage] = React.useState(1);
 
     const contactService = ContactService;
