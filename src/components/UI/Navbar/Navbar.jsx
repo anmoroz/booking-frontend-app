@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 const Navbar = ({logout, roomList}) => {
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
 
     let pages = [
         {title: 'Объекты размещения', url: 'room'},
@@ -36,16 +35,8 @@ const Navbar = ({logout, roomList}) => {
         setAnchorElNav(event.currentTarget);
     };
 
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
     };
 
     return (
