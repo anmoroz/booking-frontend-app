@@ -24,7 +24,7 @@ const Navbar = ({logout, roomList}) => {
         {title: 'Календарь', url: 'calendar'},
         {title: 'Статистика', url: 'stat'}
     ];
-    if (roomList.length === 0) {
+    if (roomList?.length === 0) {
         pages = [
             {title: 'Объекты размещения', url: 'room'},
             {title: 'Контакты', url: 'contact'}

@@ -6,13 +6,14 @@ import Container from "@mui/material/Container";
 import AppRouter from "./AppRouter";
 import {AuthContext} from "../../context/AuthProvider";
 import RoomService from "../../api/RoomService";
-import {useFetching} from "../../hooks/useFetching";
 import {BrowserRouter} from "react-router-dom";
+
+const EMPTY_LIST = []
 
 const BookingNote = () => {
     const { authState, logout } = useContext(AuthContext);
     const [showProgress, setShowProgress] = useState(false);
-    const [selectedRoom, setSelectedRoom] = useState(false);
+    const [selectedRoom, setSelectedRoom] = useState();
     const [roomList, setRoomList] = React.useState([]);
     const [showRoomSelector, setShowRoomSelector] = React.useState(false);
     const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -27,35 +28,11 @@ const BookingNote = () => {
         setShowRoomSelector(false)
     }
 
-    /*const { status, data, error, isFetching } = roomService.useRooms();
-
-    if (!isFetching) {
-        setRoomList(data.items);
-        if (data.items.length > 0 && !selectedRoom) {
-            setSelectedRoom(data.items[0]);
-        }
-    }*/
-
-    const [fetchRooms, isRoomLoading, error2] = useFetching(async (page, limit, filter) => {
-        setShowProgress(true);
-        await roomService.list()
-            .then((roomList) => {
-                setRoomList(roomList);
-                if (roomList.length > 0 && !selectedRoom) {
-                    setSelectedRoom(roomList[0]);
-                }
-            })
-            .catch(() => {
-
-            });
-        setShowProgress(false);
-    })
+    const { status, data, error, isFetching } = roomService.useRooms();
 
     React.useEffect(() => {
-        if (authState.authenticated) {
-            fetchRooms();
-        }
-    }, [authState])
+        setShowProgress(isFetching)
+    }, [isFetching])
 
     React.useEffect(() => {
         const handleStatusChange = () => {
@@ -76,26 +53,26 @@ const BookingNote = () => {
             { authState.authenticated &&
                 <React.Fragment>
                     <TopBar
-                        roomList={roomList}
-                        selectedRoom={selectedRoom}
+                        roomList={data?.items ?? EMPTY_LIST}
+                        selectedRoom={selectedRoom ?? data?.items[0]}
                         setSelectedRoom={setSelectedRoom}
                         openRoomSelector={openRoomSelector}
                         closeRoomSelector={closeRoomSelector}
                         showRoomSelector={showRoomSelector}
                         isOnline={isOnline}
                     />
-                    <Navbar logout={logout} roomList={roomList}/>
+                    <Navbar logout={logout} roomList={data?.items ?? EMPTY_LIST}/>
                 </React.Fragment>
             }
             { showProgress && <Progress /> }
             <Container fixed className="Container_main">
                 <AppRouter
                     setShowProgress={setShowProgress}
-                    roomList={roomList}
+                    roomList={data?.items ?? EMPTY_LIST}
                     setRoomList={setRoomList}
-                    selectedRoom={selectedRoom}
+                    selectedRoom={selectedRoom ?? data?.items[0]}
                     openRoomSelector={openRoomSelector}
-                    isRoomLoading={isRoomLoading}
+                    isRoomLoading={isFetching}
                 />
             </Container>
         </BrowserRouter>

@@ -2,21 +2,20 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
+const EMPTY_LIST = []
 
-    let options = [];
-    roomList.forEach((room) => {
-        options.push({label: room.name, room: room});
-    })
+const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
 
     return (
         <div>
             <Autocomplete
                 disablePortal
                 fullWidth
+                getOptionLabel={(room) => room.name}
+                isOptionEqualToValue={(room, selectedRoom) => room.id === selectedRoom.id}
                 id="room-selector"
-                value={selectedRoom ? selectedRoom.name : undefined}
-                options={options}
+                value={selectedRoom}
+                options={roomList ?? EMPTY_LIST}
                 onChange={onChangeRoomSelector}
                 renderInput={(params) => <TextField
                     {...params}

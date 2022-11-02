@@ -12,9 +12,9 @@ import "./TopBar.css";
 const TopBar = (props) => {
     const { media } = React.useContext(AppContext)
 
-    const onChangeRoomSelector = (event, option) => {
-        if (option) {
-            props.setSelectedRoom(option.room);
+    const onChangeRoomSelector = (event, room) => {
+        if (room) {
+            props.setSelectedRoom(room);
         }
         props.closeRoomSelector();
     }
