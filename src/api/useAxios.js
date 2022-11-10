@@ -22,12 +22,33 @@ const useAxios = () => {
         return req
     })
 
+    const clearTokensAndReloadPage = () => {
+        localStorageService.clearToken();
+        window.location.reload();
+    }
+
+    const refresh = async (refreshToken) => {
+        axiosInstance.post(
+            "/security/refresh-token",
+            {refreshToken: refreshToken}
+        ).then((response) => {
+            localStorageService.setToken(response.data)
+            window.location.reload();
+        }).catch(() => {
+            clearTokensAndReloadPage()
+        })
+    }
+
     axiosInstance.interceptors.response.use((response) => {
         return response;
-    }, (error) => {
+    }, async (error) => {
         if (error.response.status === 401) {
-            localStorageService.clearToken();
-            window.location.reload();
+            localStorageService.removeAccessToken()
+            if (localStorageService.getRefreshToken()) {
+                await refresh(localStorageService.getRefreshToken())
+            } else {
+                clearTokensAndReloadPage()
+            }
         }
 
         return Promise.reject(error);

@@ -26,13 +26,17 @@ const LocalStorageService = (function(){
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
     }
+    function removeAccessToken() {
+        localStorage.removeItem('accessToken');
+    }
 
     return {
         getService : getService,
         setToken : setToken,
         getAccessToken : getAccessToken,
         getRefreshToken : getRefreshToken,
-        clearToken : clearToken
+        clearToken : clearToken,
+        removeAccessToken: removeAccessToken
     }
 })();
 
