@@ -14,10 +14,10 @@ const Hero = ({openSignUpForm}) => {
                 <Grid container spacing={6} className="Home_gridContainer">
                     <Grid item xs={12} md={7}>
                         <Typography variant="h3" fontWeight={700} className="Home_title">
-                            Учет бронирований легко
+                            Учет бронирований - легко
                         </Typography>
                         <Typography variant="h6" className="Home_subtitle">
-                            <strong>Booking note</strong> - простой бесплатный сервис для арендодателей квартир, домов, управляющих гостиниц и хостелов.
+                            <strong>Booking note</strong> - простой и бесплатный сервис для арендодателей квартир, домов, управляющих гостиниц и хостелов.
                             Для ведения базы клиентов и бронирований. Оптимизирован для работы с мобильных устройств.
                         </Typography>
                         <Button
