@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
@@ -7,7 +6,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import ErrorAlert from "../UI/Alert/ErrorAlert";
-import Typography from "@mui/material/Typography";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
 const ContactForm = ({editedContact, save, closeForm}) => {
     const [errorMessage, setErrorMessage] = React.useState(false);
@@ -45,14 +45,9 @@ const ContactForm = ({editedContact, save, closeForm}) => {
     }
 
     return (
-        <div>
-            <Box sx={{ flexGrow: 1 }} m={1} p={1}>
-                <Typography variant="h6" component="h5">
-                    {contact.hasOwnProperty("id") ? "Редактирование" : "Новый контакт"}
-                </Typography>
-            </Box>
-            <ErrorAlert errorMessage={errorMessage} />
-            <Box sx={{ flexGrow: 1 }} m={1} p={1}>
+        <>
+            <DialogContent dividers>
+                <ErrorAlert errorMessage={errorMessage} />
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -104,15 +99,8 @@ const ContactForm = ({editedContact, save, closeForm}) => {
                         </FormGroup>
                     </Grid>
                 </Grid>
-            </Box>
-            <Box
-                component="span"
-                m={1}
-                p={1}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-            >
+            </DialogContent>
+            <DialogActions sx={{ justifyContent: "space-between", margin: "8px" }}>
                 <Button
                     type="submit"
                     variant="contained"
@@ -123,8 +111,8 @@ const ContactForm = ({editedContact, save, closeForm}) => {
                     Сохранить
                 </Button>
                 <Button variant="outlined" size="small" onClick={closeForm}>Отмена</Button>
-            </Box>
-        </div>
+            </DialogActions>
+        </>
     );
 };
 

@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import {TextField} from "@mui/material";
-import Box from "@mui/material/Box";
 import {AuthContext} from "../../context/AuthProvider";
 import Button from "@mui/material/Button";
 import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import Typography from "@mui/material/Typography";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
-import "./Login.css";
 
 const Login = () => {
     const emailRef = useRef();
@@ -56,27 +56,15 @@ const Login = () => {
     };
 
     return (
-        <Box
-            noValidate
-            autoComplete="off"
-            className="LoginPage-form"
-        >
-            <Typography align="center" color="#444" variant="h5" component="h3">
-                Авторизация
-            </Typography>
-            { loginInProgress &&
-                <Box m={1} p={1}>
-                    <LinearProgress sx={{ width: '100%' }} />
-                </Box>
-            }
-            {
-                errMsg &&
-                <Box m={1} p={1}>
-                    <Alert severity="error" style={{whiteSpace: "pre-wrap"}}>{errMsg}</Alert>
-                </Box>
-            }
-            <Box m={1} p={1}>
+        <>
+            <DialogContent sx={{minWidth: "500px"}}>
+                <Typography align="center" color="#444" variant="h5" component="h3">
+                    Авторизация
+                </Typography>
+                { loginInProgress && <LinearProgress sx={{ width: '100%' }} /> }
+                { errMsg && <Alert severity="error" style={{whiteSpace: "pre-wrap"}}>{errMsg}</Alert> }
                 <TextField
+                    sx={{marginTop: "10px"}}
                     ref={emailRef}
                     fullWidth
                     label="Email"
@@ -84,9 +72,8 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-            </Box>
-            <Box m={1} p={1}>
                 <TextField
+                    sx={{marginTop: "10px"}}
                     fullWidth
                     type="password"
                     label="Пароль"
@@ -95,19 +82,17 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={handleKeydown}
                 />
-            </Box>
-            <Box m={1} p={1}>
+            </DialogContent>
+            <DialogActions sx={{ justifyContent: "left", margin: "8px" }}>
                 <Button
-                    fullWidth
                     variant="contained"
                     disabled={loginInProgress}
                     onClick={handleLogin}
                 >
                     Войти
                 </Button>
-
-            </Box>
-        </Box>
+            </DialogActions>
+        </>
     );
 };
 

@@ -1,6 +1,9 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Popper from '@mui/material/Popper';
+import DialogContent from "@mui/material/DialogContent";
+
 
 const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
 
@@ -10,9 +13,8 @@ const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
     })
 
     return (
-        <div>
+        <DialogContent sx={{minWidth: "500px"}}>
             <Autocomplete
-                disablePortal
                 fullWidth
                 id="room-selector"
                 value={selectedRoom ? selectedRoom.name : undefined}
@@ -23,8 +25,14 @@ const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
                     fullWidth
                     label="Объект размещения"
                 />}
+                PopperComponent={({ style, ...props }) => (
+                    <Popper
+                        {...props}
+                        style={{ ...style, height: 0 }} // width is passed in 'style' prop
+                    />
+                )}
             />
-        </div>
+        </DialogContent>
     );
 };
 

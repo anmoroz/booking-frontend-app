@@ -1,0 +1,77 @@
+.Home_sectionGridContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 260px;
+}
+
+.Home_sectionGridItem {
+    background-color: #f2f0f1;
+    text-align: center;
+    padding: 30px;
+    width: 200px;
+    border-radius: 10px;
+    margin: 10px !important;
+}
+
+.Home_heroBox {
+    width: 100%;
+    display: flex;
+    min-height: 600px;
+    align-items: center;
+    justify-content: center;
+}
+
+.Home_gridContainer {
+    display: flex;
+    align-items: center;
+    max-width: 1300px;
+    padding: 50px;
+}
+
+.Home_title {
+    padding-bottom: 15px;
+}
+
+.Home_subtitle {
+    opacity: 0.4;
+    padding-bottom: 30px;
+}
+
+.Home_largeImage {
+    width: 100%;
+}
+
+.Home_aboutUsContainer {
+    width: 100%;
+    display: flex;
+    min-height: 400px;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0 50px 0;
+}
+
+.Home_aboutUsSubtitle {
+    opacity: 0.7;
+    padding-bottom: 30px;
+    font-size: 18px;
+}
+
+.Home_footerContainer {
+    display: flex;
+    align-items: center;
+    min-height: 10vh;
+    padding: 20px;
+    justify-content: center;
+    background-color: #f2f0f1;
+    flex-direction: column;
+}
+
+.Home_footerText {
+    padding-bottom: 10px;
+}
+
+.Home_footerDate {
+    opacity: 0.4;
+}

@@ -1,8 +1,6 @@
 import React from 'react';
 import 'dayjs/locale/ru';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import {TextField} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
@@ -16,6 +14,8 @@ import ConfirmDialog from "../UI/Dialog/ConfirmDialog";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/DeleteForever'
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
 import './ReservationForm.css';
 
@@ -93,22 +93,16 @@ const ReservationForm = ({
     }
 
     return (
-        <div>
-            {
-                errorMessage &&
-                <Stack sx={{ width: '100%' }} spacing={2}>
-                    <Alert variant="filled" severity="error" style={{whiteSpace: "pre-wrap"}}>
-                        {errorMessage}
-                    </Alert>
-                </Stack>
-            }
-            {
-                !reservation.isNewReservation &&
-                <Typography id="modal-modal-title" variant="h5" component="h3" m={1} p={1}>
-                    {reservation.isClose ? <span>Бронирование закрыто</span> : <span>Бронирование</span>}
-                </Typography>
-            }
-            <Box sx={{ flexGrow: 1 }} m={1} p={1}>
+        <>
+            <DialogContent dividers>
+                {
+                    errorMessage &&
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                        <Alert variant="filled" severity="error" style={{whiteSpace: "pre-wrap"}}>
+                            {errorMessage}
+                        </Alert>
+                    </Stack>
+                }
                 <Grid container spacing={2}>
                     {
                         reservation.isNewReservation &&
@@ -190,6 +184,8 @@ const ReservationForm = ({
                                     <MenuItem value={2}>2</MenuItem>
                                     <MenuItem value={3}>3</MenuItem>
                                     <MenuItem value={4}>4</MenuItem>
+                                    <MenuItem value={5}>5</MenuItem>
+                                    <MenuItem value={6}>6</MenuItem>
                                 </TextField>
                             </Grid>
                             <Grid item xs={6}>
@@ -206,6 +202,8 @@ const ReservationForm = ({
                                     <MenuItem value={0}>0</MenuItem>
                                     <MenuItem value={1}>1</MenuItem>
                                     <MenuItem value={2}>2</MenuItem>
+                                    <MenuItem value={3}>3</MenuItem>
+                                    <MenuItem value={4}>4</MenuItem>
                                 </TextField>
                             </Grid>
                             <Grid item xs={12}>
@@ -244,16 +242,9 @@ const ReservationForm = ({
                         />
                     </Grid>
                 </Grid>
-            </Box>
+            </DialogContent>
 
-            <Box
-                component="span"
-                m={1}
-                p={1}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-            >
+            <DialogActions sx={{ justifyContent: "space-between", margin: "8px" }}>
                 <div>
                     <Button
                         type="submit"
@@ -280,14 +271,14 @@ const ReservationForm = ({
                         <DeleteIcon />
                     </Button>
                 }
-            </Box>
+            </DialogActions>
             <ConfirmDialog
                 showConfirmDialog={showConfirmDialog}
                 setShowConfirmDialog={setShowConfirmDialog}
                 callback={() => {deleteReservationHandler()}}
                 dialogText={reservation.isClose ? "Вы действительно хотите открыть бронирование?" : "Вы действительно хотите удалить бронь?"}
             />
-        </div>
+        </>
     );
 };
 

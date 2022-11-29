@@ -220,6 +220,10 @@ const Calendar = (props) => {
         props.setShowProgress(false);
     }
 
+    /*return (
+        <div>Calendar</div>
+    )*/
+
     return (
         <div>
             {
@@ -265,16 +269,28 @@ const Calendar = (props) => {
                     <Chip label="Доступно для бронирования" className="Calendar-info_reservation_free" />
                 </Stack>
             </Alert>
-            <ModalWindow
-                open={showForm}
-                handleClose={closeReservationForm}
-                content={<ReservationForm
-                    selectedReservation={selectedReservation}
-                    closeReservationForm={closeReservationForm}
-                    saveReservation={saveReservation}
-                    deleteReservation={deleteReservation}
-                />}
-            />
+            {
+                selectedReservation &&
+                <ModalWindow
+                    open={showForm}
+                    handleClose={closeReservationForm}
+                    title={
+                        selectedReservation.hasOwnProperty('isNewReservation')
+                            ? "Новая бронь"
+                            : (selectedReservation.hasOwnProperty('id')
+                                && (!selectedReservation.hasOwnProperty('contact') || selectedReservation.contact === null)
+                                    ? "Бронирование закрыто"
+                                    : "Бронирование"
+                            )
+                    }
+                    content={<ReservationForm
+                        selectedReservation={selectedReservation}
+                        closeReservationForm={closeReservationForm}
+                        saveReservation={saveReservation}
+                        deleteReservation={deleteReservation}
+                    />}
+                />
+            }
         </div>
     );
 };

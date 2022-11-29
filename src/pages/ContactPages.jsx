@@ -123,15 +123,20 @@ const ContactPages = (props) => {
             >
                 Создать
             </Button>
-            <ModalWindow
-                open={showForm}
-                handleClose={closeForm}
-                content={<ContactForm
-                    editedContact={editedContact}
-                    save={saveContact}
-                    closeForm={closeForm}
-                />}
-            />
+            {
+                editedContact &&
+                <ModalWindow
+                    open={showForm}
+                    handleClose={closeForm}
+                    title={editedContact.hasOwnProperty("id") ? "Редактирование" : "Новый контакт"}
+                    content={<ContactForm
+                        editedContact={editedContact}
+                        save={saveContact}
+                        closeForm={closeForm}
+                    />}
+                />
+            }
+
         </React.Fragment>
     );
 };

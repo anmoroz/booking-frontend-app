@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
 import {BrowserRouter} from "react-router-dom";
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AppContextProvider } from '../../context/AppContext'
 import AppRouter from "./AppRouter";
@@ -21,13 +20,16 @@ const theme = createTheme({
         secondary: {
             main: "#e29117"
         }
-    }
+    },
+    typography: {
+        fontFamily: 'Inter, sans-serif',
+    },
 });
 
 function App() {
     const { authState, logout } = useContext(AuthContext);
     const [showProgress, setShowProgress] = useState(false);
-    const [selectedRoom, setSelectedRoom] = useState(false);
+    const [selectedRoom, setSelectedRoom] = useState(undefined);
     const [roomList, setRoomList] = React.useState([]);
     const [showRoomSelector, setShowRoomSelector] = React.useState(false);
     const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -96,16 +98,14 @@ function App() {
                         </React.Fragment>
                     }
                     { showProgress && <Progress /> }
-                    <Container fixed className="Container_main">
-                        <AppRouter
-                            setShowProgress={setShowProgress}
-                            roomList={roomList}
-                            setRoomList={setRoomList}
-                            selectedRoom={selectedRoom}
-                            openRoomSelector={openRoomSelector}
-                            isRoomLoading={isRoomLoading}
-                        />
-                    </Container>
+                    <AppRouter
+                        setShowProgress={setShowProgress}
+                        roomList={roomList}
+                        setRoomList={setRoomList}
+                        selectedRoom={selectedRoom}
+                        openRoomSelector={openRoomSelector}
+                        isRoomLoading={isRoomLoading}
+                    />
                 </BrowserRouter>
             </AppContextProvider>
         </ThemeProvider>

@@ -39,19 +39,24 @@ export const AuthProvider = ({ children }) => {
             "/security/authenticate",
             {email: email, password: password }
         ).then((response) => {
-            setAuthState({
-                accessToken: response.data.accessToken,
-                refreshToken: response.data.refreshToken,
-                authenticated: true
-            });
+            auth(response.data.accessToken, response.data.refreshToken);
             successCallback();
         }).catch((error) => {
             errorCallback(error);
         });
     }
 
+    const auth = (accessToken, refreshToken) => {
+        setAuthState({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            authenticated: true
+        });
+    }
+
     let value = {
         authState: authState,
+        auth: auth,
         login: login,
         logout: logout
     }
