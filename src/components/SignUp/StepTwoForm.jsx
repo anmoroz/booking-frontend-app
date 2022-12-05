@@ -18,7 +18,6 @@ const StepTwoForm = (props) => {
         setSignUpInProgress(true);
         sendVerify(confirmationCode)
             .then((data) => {
-                console.log('data', data)
                 props.setStep(3);
                 props.setToken(data.token)
             })
