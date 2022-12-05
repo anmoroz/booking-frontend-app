@@ -25,7 +25,7 @@ const AppRouter = (props) => {
 
     return (
         authState.authenticated ? (
-            <Container>
+            <Container className="Container_main">
                 <Routes>
                     <Route path="/room" element={ <RoomPage {...props} /> } />
                     <Route path="/contact" element={ <ContactPages {...props} /> } />
