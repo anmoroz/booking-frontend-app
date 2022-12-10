@@ -84,6 +84,13 @@ const ReservationService = (function(){
     }
 
     const listByRoom = async (selectedRoom, criteria) => {
+        //let storageKey = [selectedRoom.id, criteria.from, criteria.to].join("_");
+        //let reservationsAsString = localStorage.getItem(storageKey);
+        //if (reservationsAsString !== null) {
+
+        //    return JSON.parse(reservationsAsString);
+        //}
+
         let response = await axios.get(
             `/rooms/${selectedRoom.id}/reservations`,
             {params: {
@@ -97,6 +104,8 @@ const ReservationService = (function(){
             this[index].checkin = reservation.checkin.split('T')[0];
             this[index].checkout = reservation.checkout.split('T')[0];
         }, reservations);
+
+        //localStorage.setItem(storageKey, JSON.stringify(reservations));
 
         return reservations;
     }

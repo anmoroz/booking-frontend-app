@@ -22,8 +22,8 @@ const Calendar = (props) => {
     const [showForm, setShowForm] = React.useState(false);
     const [selectedReservation, setSelectedReservation] = React.useState();
     const [criteria, setCriteria] = React.useState({
-        from: dayjs().startOf('month').add(-6, 'day').format("YYYY-MM-DD"),
-        to: dayjs().startOf('month').add(37, 'day').format("YYYY-MM-DD"),
+        from: dayjs().startOf('month').add(-1, 'month').format("YYYY-MM-DD"),
+        to: dayjs().startOf('month').add(1, 'month').format("YYYY-MM-DD"),
     });
 
     const openReservationForm = (selectedReservation) => {
@@ -63,8 +63,8 @@ const Calendar = (props) => {
     const updateCriteria = (calendarApi) => {
         let calendarDate = calendarApi.getDate();
         setCriteria({
-            from: dayjs(calendarDate).add(6, 'day').format("YYYY-MM-DD"),
-            to: dayjs(calendarDate).add(37, 'day').format("YYYY-MM-DD"),
+            from: dayjs(calendarDate).add(-1, 'month').format("YYYY-MM-DD"),
+            to: dayjs(calendarDate).add(1, 'month').format("YYYY-MM-DD"),
         });
     }
 
@@ -219,10 +219,6 @@ const Calendar = (props) => {
         }
         props.setShowProgress(false);
     }
-
-    /*return (
-        <div>Calendar</div>
-    )*/
 
     return (
         <div>

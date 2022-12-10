@@ -49,8 +49,9 @@ function App() {
     React.useMemo(() => {
         if (data) {
             setRoomList(data.items);
-            if (roomList.length > 0 && !selectedRoom) {
-                setSelectedRoom(roomList[0]);
+
+            if (data.items.length > 0 && !selectedRoom) {
+                setSelectedRoom(data.items[0]);
             }
         }
     }, [data])
