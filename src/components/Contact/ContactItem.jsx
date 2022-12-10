@@ -9,6 +9,7 @@ import Chip from '@mui/material/Chip';
 import WarningIcon from '@mui/icons-material/ErrorOutline';
 import {formatPhone} from "../../utils/PhoneFormatter";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import CallIcon from '@mui/icons-material/Call';
 import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
@@ -48,6 +49,14 @@ const ContactItem = ({contact, selectContactHandler}) => {
                 <Tooltip title="Позвонить">
                     <IconButton aria-label="Позвонить" href={`tel:+${contact.phone}`}>
                         <CallIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Открыть в WhatsApp">
+                    <IconButton
+                        aria-label="Открыть в WhatsApp"
+                        href={`whatsapp://send?phone=${contact.phone}`}
+                    >
+                        <WhatsAppIcon />
                     </IconButton>
                 </Tooltip>
                 <IconButton
