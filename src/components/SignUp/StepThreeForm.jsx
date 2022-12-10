@@ -105,7 +105,7 @@ const StepThreeForm = (props) => {
                     />
                     {formErrorMessages.hasOwnProperty("password") && (
                         <FormHelperText error id="password-error">
-                            {formErrorMessages.password ?? ''}
+                            { formErrorMessages.password }
                         </FormHelperText>
                     )}
                 </FormControl>

@@ -7,18 +7,15 @@ import DialogContent from "@mui/material/DialogContent";
 
 const RoomSelectorForm = ({roomList, selectedRoom, onChangeRoomSelector}) => {
 
-    let options = [];
-    roomList.forEach((room) => {
-        options.push({label: room.name, room: room});
-    })
-
     return (
         <DialogContent sx={{minWidth: "500px"}}>
             <Autocomplete
                 fullWidth
+                getOptionLabel={(room) => room.name}
+                isOptionEqualToValue={(room, selectedRoom) => room.id === selectedRoom.id}
                 id="room-selector"
-                value={selectedRoom ? selectedRoom.name : undefined}
-                options={options}
+                value={selectedRoom}
+                options={roomList}
                 onChange={onChangeRoomSelector}
                 renderInput={(params) => <TextField
                     {...params}

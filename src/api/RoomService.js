@@ -1,4 +1,5 @@
 import useAxios from "./useAxios";
+import {useQuery} from "@tanstack/react-query";
 
 const RoomService = (function() {
     const axios = useAxios();
@@ -21,7 +22,16 @@ const RoomService = (function() {
         return response.data.items;
     }
 
+    function useRooms() {
+        return useQuery(["rooms"], async () => {
+            const { data } = await axios.get("/rooms");
+
+            return data;
+        });
+    }
+
     return {
+        useRooms: useRooms,
         update:update,
         create: create,
         list: list

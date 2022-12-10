@@ -10,7 +10,7 @@ import TopBar from "../UI/TopBar/TopBar";
 import RoomService from "../../api/RoomService";
 
 import './App.css';
-import {useFetching} from "../../hooks/useFetching";
+
 
 const theme = createTheme({
     palette: {
@@ -44,26 +44,21 @@ function App() {
         setShowRoomSelector(false)
     }
 
-    const [fetchRooms, isRoomLoading, error] = useFetching(async (page, limit, filter) => {
-        setShowProgress(true);
-        await roomService.list()
-            .then((roomList) => {
-                setRoomList(roomList);
-                if (roomList.length > 0 && !selectedRoom) {
-                    setSelectedRoom(roomList[0]);
-                }
-            })
-            .catch(() => {
+    const { status, data, error, isFetching } = roomService.useRooms();
 
-            });
-        setShowProgress(false);
-    })
+    React.useMemo(() => {
+        if (data) {
+            setRoomList(data.items);
+            if (roomList.length > 0 && !selectedRoom) {
+                setSelectedRoom(roomList[0]);
+            }
+        }
+    }, [data])
+
 
     React.useEffect(() => {
-        if (authState.authenticated) {
-            fetchRooms();
-        }
-    }, [authState])
+        setShowProgress(isFetching)
+    }, [isFetching])
 
     React.useEffect(() => {
         const handleStatusChange = () => {
@@ -78,6 +73,7 @@ function App() {
             window.removeEventListener('offline', handleStatusChange);
         };
     }, [isOnline]);
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -104,7 +100,7 @@ function App() {
                         setRoomList={setRoomList}
                         selectedRoom={selectedRoom}
                         openRoomSelector={openRoomSelector}
-                        isRoomLoading={isRoomLoading}
+                        isRoomLoading={isFetching}
                     />
                 </BrowserRouter>
             </AppContextProvider>

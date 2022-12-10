@@ -5,11 +5,19 @@ import {AuthProvider} from './context/AuthProvider';
 import App from './components/App/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import {
+    QueryClient,
+    QueryClientProvider,
+} from "@tanstack/react-query";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const queryClient = new QueryClient();
+
 root.render(
   <AuthProvider>
-    <App />
+      <QueryClientProvider client={queryClient}>
+            <App />
+      </QueryClientProvider>
   </AuthProvider>
 );
 
