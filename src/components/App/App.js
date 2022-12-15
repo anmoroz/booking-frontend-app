@@ -8,6 +8,7 @@ import {AuthContext} from "../../context/AuthProvider";
 import Progress from "../UI/Progress/Progress";
 import TopBar from "../UI/TopBar/TopBar";
 import RoomService from "../../api/RoomService";
+import HomePage from "../../pages/HomePage";
 
 import './App.css';
 
@@ -28,6 +29,17 @@ const theme = createTheme({
 
 function App() {
     const { authState, logout } = useContext(AuthContext);
+
+    if (! authState.authenticated) {
+        return (
+            <ThemeProvider theme={theme}>
+                <AppContextProvider>
+                    <HomePage/>
+                </AppContextProvider>
+            </ThemeProvider>
+        )
+    }
+
     const [showProgress, setShowProgress] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState(undefined);
     const [roomList, setRoomList] = React.useState([]);
@@ -80,20 +92,18 @@ function App() {
         <ThemeProvider theme={theme}>
             <AppContextProvider>
                 <BrowserRouter>
-                    { authState.authenticated &&
-                        <React.Fragment>
-                            <TopBar
-                                roomList={roomList}
-                                selectedRoom={selectedRoom}
-                                setSelectedRoom={setSelectedRoom}
-                                openRoomSelector={openRoomSelector}
-                                closeRoomSelector={closeRoomSelector}
-                                showRoomSelector={showRoomSelector}
-                                isOnline={isOnline}
-                            />
-                            <Navbar logout={logout} roomList={roomList}/>
-                        </React.Fragment>
-                    }
+                    <React.Fragment>
+                        <TopBar
+                            roomList={roomList}
+                            selectedRoom={selectedRoom}
+                            setSelectedRoom={setSelectedRoom}
+                            openRoomSelector={openRoomSelector}
+                            closeRoomSelector={closeRoomSelector}
+                            showRoomSelector={showRoomSelector}
+                            isOnline={isOnline}
+                        />
+                        <Navbar logout={logout} roomList={roomList}/>
+                    </React.Fragment>
                     { showProgress && <Progress /> }
                     <AppRouter
                         setShowProgress={setShowProgress}
